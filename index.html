@@ -488,9 +488,10 @@
         <!-- 3. Significantly Expanded Interactive Glossary Section -->
         <section id="glossary" class="scroll-mt-24 bg-ib-light/70 p-6 md:p-10 rounded-2xl border border-slate-200">
             <div class="text-center mb-8">
-                <h2 class="text-3xl md:text-4xl font-serif font-bold text-ib-navy">Comprehensive Device & Technique Glossary</h2>
+                <span class="bg-ib-blue/10 text-ib-blue border border-ib-blue/30 font-bold text-xs uppercase tracking-widest px-3 py-1 rounded-full">Interactive Deep-Dive Inspector</span>
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-ib-navy mt-3">Comprehensive Device & Technique Glossary</h2>
                 <div class="w-24 h-1 bg-ib-accent mx-auto mt-4 mb-4"></div>
-                <p class="text-slate-600 max-w-2xl mx-auto text-sm md:text-base">Search or filter through 56 essential literary, persuasive, syntactic, and visual devices. Each card includes how to analyze its persuasive effect in Paper 1.</p>
+                <p class="text-slate-600 max-w-2xl mx-auto text-sm md:text-base">Search or filter through 56 essential literary, persuasive, syntactic, and visual devices. <strong>Click on any device card</strong> to open a deep-dive window with cross-genre examples, Level 7 analytical phrasing, and common pitfalls.</p>
             </div>
 
             <!-- Search & Category Filter Controls -->
@@ -654,6 +655,118 @@
 
     </main>
 
+    <!-- Device Deep-Dive Modal Inspector -->
+    <div id="device-modal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-ib-navy/75 backdrop-blur-sm transition-opacity" onclick="closeDeviceModal()"></div>
+
+        <div class="flex min-h-full items-center justify-center p-3 sm:p-6">
+            <div class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all w-full max-w-4xl border border-slate-200 my-8">
+                
+                <!-- Modal Top Header Bar -->
+                <div class="bg-gradient-to-r from-ib-navy via-ib-blue to-ib-navy px-6 py-5 text-white flex items-start justify-between gap-4 border-b border-slate-700">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 mb-2">
+                            <span id="modal-cat-badge" class="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded bg-ib-accent text-ib-navy">Category</span>
+                            <span id="modal-index-badge" class="text-xs text-slate-300 font-mono">Device 1 of 56</span>
+                        </div>
+                        <h3 id="modal-term-title" class="text-2xl sm:text-3xl font-serif font-bold tracking-tight text-white">Device Name</h3>
+                    </div>
+                    <button type="button" onclick="closeDeviceModal()" class="rounded-lg bg-white/10 p-2 text-slate-200 hover:bg-white/20 hover:text-white focus:outline-none transition" title="Close (Esc)">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Modal Body Content -->
+                <div class="px-6 py-6 sm:px-8 max-h-[75vh] overflow-y-auto space-y-6 bg-slate-50/60">
+                    
+                    <!-- 1. Core Definition & Nuance -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <h4 class="text-xs font-bold uppercase tracking-wider text-ib-blue mb-1.5">Core Definition & Conceptual Nuance</h4>
+                        <p id="modal-def" class="text-slate-800 text-sm sm:text-base font-medium leading-relaxed mb-3"></p>
+                        <div class="bg-ib-light/70 p-3.5 rounded-lg border-l-4 border-ib-accent text-xs sm:text-sm text-slate-700 leading-relaxed">
+                            <strong class="text-ib-navy font-bold">Core Paper 1 Effect: </strong>
+                            <span id="modal-short-effect"></span>
+                        </div>
+                    </div>
+
+                    <!-- 2. Extended Analytical Mechanism -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="w-2 h-2 rounded-full bg-ib-blue"></span>
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-ib-navy">Extended Explanation & Analytical Mechanism (How & Why It Works)</h4>
+                        </div>
+                        <p id="modal-mechanism" class="text-slate-700 text-sm leading-relaxed"></p>
+                    </div>
+
+                    <!-- 3. Multiple Concrete Examples Across Text Types -->
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-ib-navy">Concrete Manifestations Across Paper 1 Text Types</h4>
+                            </div>
+                            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Cross-Genre Application</span>
+                        </div>
+                        <div id="modal-examples-list" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+
+                    <!-- 4. Level 7 Model Mini-Analysis / Sentence Starter -->
+                    <div class="bg-gradient-to-br from-ib-navy to-slate-900 text-white p-5 rounded-xl shadow-md border border-slate-700">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="bg-ib-accent text-ib-navy text-[10px] font-extrabold uppercase px-2 py-0.5 rounded">Criterion B & D Gold Standard</span>
+                                <h4 class="text-xs font-bold uppercase tracking-wider text-ib-accent">Copy-Ready Level 7 Analytical Framing</h4>
+                            </div>
+                            <button id="copy-starter-btn" onclick="copyModalStarter()" class="text-xs bg-white/10 hover:bg-white/20 text-white px-3 py-1 rounded border border-white/20 transition flex items-center gap-1.5">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                <span id="copy-starter-text">Copy Framing</span>
+                            </button>
+                        </div>
+                        <p id="modal-level7-model" class="font-serif italic text-slate-100 text-sm leading-relaxed bg-black/25 p-4 rounded-lg border border-white/10"></p>
+                    </div>
+
+                    <!-- 5. Common Pitfalls & Synergistic Devices -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-red-50/80 p-4 rounded-xl border border-red-200">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-red-800 mb-1.5 flex items-center gap-1.5">
+                                <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                Common Paper 1 Pitfall to Avoid
+                            </h4>
+                            <p id="modal-pitfall" class="text-xs text-red-900 leading-relaxed"></p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-ib-navy mb-2">Synergistic / Paired Devices (Click to Jump)</h4>
+                            <p class="text-[11px] text-slate-500 mb-2.5">Combine these devices in the same paragraph to score 5/5 in Criterion B:</p>
+                            <div id="modal-related-tags" class="flex flex-wrap gap-1.5">
+                                <!-- Populated via JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Modal Bottom Navigation Footer -->
+                <div class="bg-slate-100 px-6 py-4 flex items-center justify-between border-t border-slate-200">
+                    <button type="button" onclick="navigateModal(-1)" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-slate-300 text-xs font-bold text-slate-700 hover:bg-slate-50 shadow-sm transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        Previous Device
+                    </button>
+                    <span class="hidden sm:inline text-xs text-slate-500">Use <kbd class="px-1.5 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-mono">←</kbd> <kbd class="px-1.5 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-mono">→</kbd> arrow keys or <kbd class="px-1.5 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-mono">Esc</kbd></span>
+                    <button type="button" onclick="navigateModal(1)" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-ib-navy text-white text-xs font-bold hover:bg-ib-blue shadow-sm transition">
+                        Next Device
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-ib-navy text-slate-400 py-10 text-center border-t border-slate-800 mt-20">
         <div class="max-w-7xl mx-auto px-4">
@@ -696,416 +809,924 @@
                 cat: "Lexical & Figurative",
                 def: "An implicit comparison asserting that one thing is figuratively another, transferring qualities from a concrete vehicle to an abstract tenor.",
                 ex: "\"Social media feeds have become cognitive slot machines.\"",
-                effect: "Makes abstract socio-political or psychological concepts visceral and immediate, steering the reader's moral evaluation through the connotations of the vehicle."
+                effect: "Makes abstract socio-political or psychological concepts visceral and immediate, steering the reader's moral evaluation through the connotations of the vehicle.",
+                mechanism: "In non-literary Paper 1 texts, a metaphor is never merely decorative; it functions as an ideological filter. By mapping a concrete, familiar domain (the 'vehicle', such as gambling, disease, or warfare) onto a complex or abstract issue (the 'tenor', such as algorithmic attention, climate policy, or consumerism), the writer highlights specific attributes while hiding others. This forces the target audience to adopt the writer's emotional attitude toward the subject instantaneously.",
+                genreExamples: [
+                    { genre: "Opinion Column / Op-Ed", quote: "\"Social media feeds have become cognitive slot machines pulled by our thumbs.\"", analysis: "Transfers the predatory, addictive mechanics of casino gambling ('slot machines') onto smartphone usage, framing tech companies as house dealers exploiting human dopamine." },
+                    { genre: "Political / Advocacy Speech", quote: "\"Austerity is not a fiscal scalpel; it is a wrecking ball swung at public libraries and clinics.\"", analysis: "Rejects the surgical metaphor of precision ('scalpel') used by opponents and replaces it with indiscriminate destruction ('wrecking ball') to arouse public indignation." },
+                    { genre: "Charity Print Appeal", quote: "\"Plastic packaging is a slow-motion oil spill choking the Pacific.\"", analysis: "Maps the acute, universally recognized catastrophe of an 'oil spill' onto everyday consumer plastic to overcome viewer apathy toward gradual pollution." }
+                ],
+                level7Model: "By casting smartphone notifications as 'cognitive slot machines,' the columnist maps the predatory connotations of casino addiction onto everyday digital habits, stripping tech platforms of their benign 'social' facade and compelling the reader to recognize their own behavioral manipulation.",
+                pitfall: "Simply stating 'this metaphor paints a vivid picture in the reader's mind' or 'makes the text more engaging.' You must unpack the specific connotations of the vehicle and explain how they shift the audience's attitude toward the topic.",
+                related: ["Extended Metaphor (Conceit)", "Simile", "Semantic Field (Lexical Cluster)"]
             },
             {
                 term: "Extended Metaphor (Conceit)",
                 cat: "Lexical & Figurative",
-                def: "A sustained metaphor developed across multiple sentences, paragraphs, or an entire text.",
+                def: "A sustained metaphor developed across multiple sentences, paragraphs, or an entire text through a network of interconnected comparisons.",
                 ex: "Framing corporate burnout as an extractive strip-mining operation throughout an entire op-ed (\"drilling,\" \"exhausted seams,\" \"slag heaps\").",
-                effect: "Provides structural cohesion (Criterion C) and deepens the ideological framing so the reader views the entire issue through the writer's chosen lens."
+                effect: "Provides structural cohesion (Criterion C) and deepens the ideological framing so the reader views the entire issue through the writer's chosen lens.",
+                mechanism: "Unlike a fleeting single metaphor, an extended metaphor acts as the architectural backbone of a persuasive text. As the writer continually returns to and elaborates upon the central comparison across multiple paragraphs—introducing fresh vocabulary from that source domain—the comparison ceases to feel like a figure of speech and begins to feel like literal reality to the reader.",
+                genreExamples: [
+                    { genre: "Lifestyle Feature / Essay", quote: "\"Modern hustle culture drills into our waking hours, strip-mines our creative reserves, and leaves behind an exhausted slag heap of Sunday-night anxiety.\"", analysis: "Sustains an industrial mining conceit ('drills', 'strip-mines', 'slag heap') to equate modern white-collar productivity with environmental devastation." },
+                    { genre: "Public Health Brochure", quote: "\"Vaccination trains your cellular border guards, updates their intelligence briefings, and fortifies the bodily perimeter before the invader arrives.\"", analysis: "Uses a sustained military-defense conceit to demystify complex immunology for lay readers and inspire proactive self-protection." },
+                    { genre: "Visual / Multimodal Ad", quote: "A financial literacy webpage structured entirely as a 'Diagnostic Clinic' with sections for 'Symptom Check,' 'Fiscal Triage,' and 'Long-Term Rehab.'", analysis: "Transforms intimidating debt management into a curable medical condition, reducing reader shame and encouraging consultation." }
+                ],
+                level7Model: "Structurally, the writer threads an extended metaphor of industrial strip-mining throughout the column—progressing from 'drilling' in the introduction to 'exhausted seams' in the conclusion—to cohesively frame corporate overwork as an unsustainable extraction of finite human vitality.",
+                pitfall: "Analyzing only the first appearance of the metaphor in isolation and ignoring how it evolves structurally across the beginning, middle, and end of the text.",
+                related: ["Metaphor", "Semantic Field (Lexical Cluster)", "Cyclical / Bookended Structure"]
             },
             {
                 term: "Simile",
                 cat: "Lexical & Figurative",
-                def: "An explicit comparison between two distinct things using 'like' or 'as'.",
+                def: "An explicit comparison between two fundamentally distinct things using connective words such as 'like', 'as', or 'than'.",
                 ex: "\"Scrolling through news alerts like a sentry scanning a dark horizon.\"",
-                effect: "Clarifies unfamiliar processes or emotional states via vivid imagery while maintaining a conscious distinction between the two compared elements."
+                effect: "Clarifies unfamiliar processes or emotional states via vivid imagery while maintaining a conscious distinction between the two compared elements.",
+                mechanism: "In non-literary texts—especially popular science articles, travel writing, and memoirs—similes serve as cognitive bridges. Because they explicitly signal the comparison with 'like' or 'as', they allow writers to translate unfamiliar dimensions, technical data, or subtle psychological sensations into everyday sensory experiences that the target audience immediately grasps.",
+                genreExamples: [
+                    { genre: "Popular Science Article", quote: "\"CRISPR gene editing operates like a microscopic 'find-and-replace' tool inside a word processor.\"", analysis: "Demystifies intimidating biotechnology for a general readership by comparing DNA manipulation to familiar office software." },
+                    { genre: "Travel Blog / Memoir", quote: "\"The midday heat hung over the piazza like a wet wool blanket, muffling even the vespa engines.\"", analysis: "Combines tactile ('wet wool blanket') and auditory ('muffling') sensory imagery to immerse the armchair traveler in the oppressive climate." },
+                    { genre: "Satirical Op-Ed", quote: "\"Tech CEOs apologize before Congress like toddlers caught with chocolate on their chins—performative, rehearsed, and entirely unrepentant.\"", analysis: "Infantilizes powerful executives through a humiliating domestic comparison, dismantling their corporate ethos." }
+                ],
+                level7Model: "To bridge the gap between complex molecular biology and a lay readership, the author employs the accessible simile 'like a microscopic find-and-replace tool,' domesticating genetic engineering into a reassuringly precise everyday action.",
+                pitfall: "Confusing similes with literal comparisons (e.g., 'She is like her mother' is not a figurative simile) or failing to explain why that specific comparison suits the target audience's background knowledge.",
+                related: ["Metaphor", "Juxtaposition", "Register & Diction"]
             },
             {
                 term: "Personification",
                 cat: "Lexical & Figurative",
-                def: "Attributing human agency, emotions, or moral intent to inanimate objects, nature, or abstract systems.",
+                def: "Attributing human agency, consciousness, emotions, or moral intent to inanimate objects, natural phenomena, or abstract systems.",
                 ex: "\"The algorithm stalks your insecurities and whispers tailored temptations.\"",
-                effect: "Assigns conscious malice or vulnerability to non-human entities—transforming an impersonal system into a villain or nature into a grieving victim."
+                effect: "Assigns conscious malice or vulnerability to non-human entities—transforming an impersonal system into a villain or nature into a grieving victim.",
+                mechanism: "Human beings are evolutionarily wired to respond to interpersonal drama rather than abstract systems. When a writer personifies an impersonal entity—such as 'the market,' 'an algorithm,' or 'the climate'—they endow it with conscious willpower. In advocacy texts, nature is often personified as a wounded mother or retaliating victim to evoke empathy, whereas in critiques of technology or finance, systems are personified as calculating predators to provoke moral outrage.",
+                genreExamples: [
+                    { genre: "Tech Critique / Op-Ed", quote: "\"The recommendation engine stalks your late-night insecurities and whispers tailored temptations into your feed.\"", analysis: "Personifies lines of code as a predatory stalker and seducer ('stalks', 'whispers'), shifting blame from the user's willpower to the platform's design." },
+                    { genre: "Environmental Appeal", quote: "\"For a century, the glacier has wept silently into the fjord; today, its lungs are collapsing.\"", analysis: "Endows a geological ice mass with human grief ('wept') and anatomy ('lungs'), weaponizing pathos to protest global warming." },
+                    { genre: "Commercial Advertisement", quote: "\"A timepiece that remembers your grandfather's adventures and waits patiently for your son's.\"", analysis: "Personifies a luxury watch as a loyal family custodian, elevating a consumer commodity into an emotional heirloom." }
+                ],
+                level7Model: "By personifying the recommendation algorithm through the predatory verbs 'stalks' and 'whispers,' the author transforms inert computer code into a calculating antagonist, absolving the reader of personal guilt while redirecting their anger toward Silicon Valley.",
+                pitfall: "Merely identifying that 'the glacier is given human qualities to make it relatable' without specifying whether the personification casts the subject as a predator, a victim, or a guardian.",
+                related: ["Zoomorphism", "Pathos (Emotion)", "Metaphor"]
             },
             {
                 term: "Zoomorphism",
                 cat: "Lexical & Figurative",
-                def: "Attributing animalistic traits, instincts, or behaviors to humans, institutions, or machines.",
+                def: "Attributing animalistic traits, evolutionary instincts, or predatory behaviors to humans, institutions, crowds, or machines.",
                 ex: "\"Predatory lenders circling financially wounded families in a feeding frenzy.\"",
-                effect: "Dehumanizes corporations or adversaries by reducing their calculated actions to savage, amoral evolutionary instincts."
+                effect: "Dehumanizes corporations or adversaries by reducing their calculated actions to savage, amoral evolutionary instincts.",
+                mechanism: "Whereas personification elevates the non-human to the human plane, zoomorphism lowers human beings or human institutions to the level of beasts or parasites. In polemical journalism, political speeches, and satirical cartoons, zoomorphic verbs ('prowling', 'swarming', 'leeching', 'hibernating') strip subjects of rational dignity, portraying them as driven by base appetite, herd mentality, or ruthless predation.",
+                genreExamples: [
+                    { genre: "Investigative Journalism", quote: "\"Payday loan companies circle post-industrial towns like vultures, gorging on families one missed paycheck away from ruin.\"", analysis: "Uses scavenger imagery ('circle', 'vultures', 'gorging') to provoke visceral moral disgust toward high-interest financial institutions." },
+                    { genre: "Cultural Critique", quote: "\"Black Friday shoppersstampeded through the shattered glass, baying for discounted flat-screens.\"", analysis: "Reduces consumers to a mindless herd ('stampeded', 'baying'), critiquing how materialism erodes civilized human restraint." },
+                    { genre: "Political Cartoon / Visual", quote: "Depicting a monopoly tech conglomerate as a giant octopus wrapping its tentacles around capitol buildings and homes.", analysis: "Visual zoomorphism portraying corporate expansion as a suffocating, inescapable deep-sea monster." }
+                ],
+                level7Model: "Through the zoomorphic lexical cluster of 'circling' and 'gorging,' the journalist strips payday lenders of their professional corporate veneer, reducing their business model to the amoral scavenging of vultures.",
+                pitfall: "Confusing zoomorphism with personification. Remember: human/institution described as animal = zoomorphism; animal/object described as human = personification.",
+                related: ["Personification", "Dysphemism", "Semantic Field (Lexical Cluster)"]
             },
             {
                 term: "Synecdoche",
                 cat: "Lexical & Figurative",
-                def: "A figure of speech in which a part is made to represent the whole, or vice versa.",
+                def: "A figure of speech in which a physical part is made to represent the whole, or the whole is used to represent a part.",
                 ex: "\"Hungry mouths to feed\" (mouths = people) or \"boots on the ground\" (boots = soldiers).",
-                effect: "Reduces individuals to a single defining function or need, either to emphasize urgent physical vulnerability or to critique institutional dehumanization."
+                effect: "Reduces individuals to a single defining function or need, either to emphasize urgent physical vulnerability or to critique institutional dehumanization.",
+                mechanism: "Synecdoche operates like a close-up camera lens in language: by substituting a single anatomical part ('hands', 'mouths', 'eyes', 'brains') for an entire human being, the writer forces the audience to focus exclusively on one dimension of that person's existence. In charity appeals, 'hungry mouths' highlights raw biological survival; in labor critiques, calling factory workers 'hired hands' exposes how capitalism values workers only for their mechanical utility.",
+                genreExamples: [
+                    { genre: "Humanitarian Charity Ad", quote: "\"For $15 a month, you can ensure four small mouths in the Sahel don't go to sleep empty.\"", analysis: "Focuses exclusively on 'small mouths' to distill complex geopolitical famine into an immediate, solvable maternal instinct to feed a child." },
+                    { genre: "Labor / Economic Op-Ed", quote: "\"To the warehouse algorithm, employees are merely pairs of scanning hands attached to aching feet.\"", analysis: "Critiques corporate dehumanization by showing how management fragments whole human beings into replaceable anatomical parts." },
+                    { genre: "Visual / Photography", quote: "A tight close-up photograph showing only a pair of calloused, soil-stained hands cupping coffee beans.", analysis: "Visual synecdoche that foregrounds the grueling manual labor behind a morning luxury product." }
+                ],
+                level7Model: "By employing the synecdoche 'pairs of scanning hands,' the columnist exposes how warehouse automation fragments workers into mere mechanical appendages, erasing their humanity and psychological well-being.",
+                pitfall: "Mixing up synecdoche with metonymy. Synecdoche requires a physical PART-to-WHOLE relationship (hand = part of a body), whereas metonymy uses a conceptually associated symbol (crown = monarchy).",
+                related: ["Metonymy", "Camera Angle (Low, High, Eye-Level)", "Pathos (Emotion)"]
             },
             {
                 term: "Metonymy",
                 cat: "Lexical & Figurative",
-                def: "Substituting the name of an attribute or closely associated institution for the thing itself.",
+                def: "Substituting the name of an attribute, location, or closely associated object for the complex institution or concept itself.",
                 ex: "\"Silicon Valley refuses to regulate itself\" or \"The Crown issued a statement.\"",
-                effect: "Condenses vast, faceless bureaucratic power into a single recognizable monolith, making it easier for the writer to critique institutional accountability."
+                effect: "Condenses vast, faceless bureaucratic power into a single recognizable monolith, making it easier for the writer to critique institutional accountability.",
+                mechanism: "In political journalism, editorials, and speeches, metonymy allows writers to turn sprawling networks of power into tangible characters. Referring to tech executives collectively as 'Silicon Valley,' financial speculators as 'Wall Street,' or government bureaucracy as 'Westminster' or 'Washington' creates a unified antagonist or symbol. Conversely, substituting 'the kitchen table' for family financial anxiety grounds abstract inflation in domestic intimacy.",
+                genreExamples: [
+                    { genre: "Political Editorial", quote: "\"While Wall Street celebrated record quarterly dividends, Main Street quietly boarded up its shopfronts.\"", analysis: "Uses twin geographical metonyms ('Wall Street' vs. 'Main Street') to dramatize macroeconomic inequality as a tale of two rival neighborhoods." },
+                    { genre: "Media Critique", quote: "\"The algorithm now decides what the ballot box will hear.\"", analysis: "Substitutes 'the ballot box' for democratic voters, emphasizing how digital curation directly manipulates civic elections." },
+                    { genre: "Advocacy Speech", quote: "\"The boardroom cannot continue to write checks that the classroom and the hospital ward must pay.\"", analysis: "Uses architectural metonyms ('boardroom', 'classroom', 'hospital ward') to contrast corporate privilege with underfunded public services." }
+                ],
+                level7Model: "Through the antithetical metonyms of 'Wall Street' and 'Main Street,' the editorial condenses complex macroeconomic divergence into a stark geographical binary between elite financial speculation and everyday community survival.",
+                pitfall: "Treating metonymy as a simple shorthand without analyzing how turning an institution into a monolithic place-name ('Silicon Valley') assigns collective moral blame.",
+                related: ["Synecdoche", "Antithesis", "Inclusive vs. Exclusive Pronouns"]
             },
             {
                 term: "Juxtaposition",
                 cat: "Lexical & Figurative",
-                def: "Placing two contrasting ideas, images, or perspectives side by side for comparative emphasis.",
+                def: "Placing two contrasting ideas, images, settings, or perspectives side by side to invite comparative judgment.",
                 ex: "Placing a luxury watch advertisement adjacent to statistics on child poverty.",
-                effect: "Highlights hypocrisy, inequality, or moral absurdity without the writer needing to state the judgment explicitly, forcing the reader to bridge the gap."
+                effect: "Highlights hypocrisy, inequality, or moral absurdity without the writer needing to state the judgment explicitly, forcing the reader to bridge the gap.",
+                mechanism: "Juxtaposition is one of the highest-yielding analytical concepts in IB Paper 1 because it operates across both written and visual texts. By placing two starkly different realities in immediate proximity—such as corporate greenwashing slogans next to photographs of toxic runoff—the creator generates cognitive dissonance. Because the audience must mentally synthesize the contrast themselves, the resulting moral realization feels earned rather than preached.",
+                genreExamples: [
+                    { genre: "Keynote Speech", quote: "\"In this chandeliered Geneva hall, sea-level rise is a PDF line graph; in my grandmother's courtyard in Tuvalu, it is brackish water rotting the taro roots.\"", analysis: "Juxtaposes elite diplomatic insulation ('chandeliered hall', 'PDF') against visceral indigenous reality ('brackish water', 'taro roots') to indict inaction." },
+                    { genre: "Print Charity Appeal", quote: "A split-screen visual layout: the left half shows a pristine suburban child drinking tap water; the right half shows a child of identical age drinking from a muddy rut.", analysis: "Visual juxtaposition that exposes the arbitrary lottery of birth geography, triggering guilt and empathy in affluent parents." },
+                    { genre: "Satirical Column", quote: "Juxtaposing a fast-fashion brand's 'Empowering Women' marketing campaign against leaked payslips of its garment workers earning $0.18 an hour.", analysis: "Uses documentary juxtaposition to weaponize irony and dismantle corporate ethos." }
+                ],
+                level7Model: "By juxtaposing the sterile luxury of the 'chandeliered Geneva hall' against the tactile decay of 'brackish water rotting the taro roots,' the speaker exposes the moral chasm between bureaucratic climate modeling and frontline survival.",
+                pitfall: "Pointing out that two things are 'different' without explaining the thematic tension or irony produced by placing them side by side.",
+                related: ["Antithesis", "Oxymoron", "Chiaroscuro & Lighting"]
             },
             {
                 term: "Oxymoron",
                 cat: "Lexical & Figurative",
-                def: "A compressed paradox combining two contradictory terms into a single phrase.",
+                def: "A compressed two- or three-word paradox that fuses directly contradictory terms into a single syntactic unit.",
                 ex: "\"Alone together,\" \"deafening silence,\" or \"sustainable fast-fashion.\"",
-                effect: "Arrests the reader's attention through cognitive dissonance, exposing the internal contradiction or deceit within a cultural phenomenon."
+                effect: "Arrests the reader's attention through cognitive dissonance, exposing the internal contradiction or deceit within a cultural phenomenon.",
+                mechanism: "An oxymoron forces two mutually exclusive concepts into a head-on lexical collision. In non-literary texts—particularly headlines, cultural criticism, and environmental exposés—writers coin oxymorons to unmask modern hypocrisies or psychological paradoxes. When a writer labels a phenomenon 'scheduled spontaneity' or 'ethical oil,' the internal contradiction immediately signals verbal irony and invites critical scrutiny.",
+                genreExamples: [
+                    { genre: "Sociological Op-Ed", quote: "\"Packed shoulder-to-shoulder on the morning subway, commuters sit alone together behind their glowing screens.\"", analysis: "The oxymoron 'alone together' encapsulates the central paradox of urban digital life: physical proximity paired with emotional isolation." },
+                    { genre: "Environmental Exposé", quote: "\"The retail giant's new 'Disposable Heritage' collection is a masterclass in sustainable fast-fashion.\"", analysis: "Uses the oxymorons 'Disposable Heritage' and 'sustainable fast-fashion' to ridicule corporate greenwashing." },
+                    { genre: "Lifestyle Satire", quote: "\"I scheduled a twelve-minute window of mandatory spontaneity between my afternoon Zoom calls.\"", analysis: "Collides rigid obligation ('mandatory') with unscripted freedom ('spontaneity') to mock productivity culture." }
+                ],
+                level7Model: "The columnist crystallizes the absurdity of modern wellness apps through the oxymoron 'mandatory spontaneity,' demonstrating how the compulsion to schedule every minute destroys the very freedom it attempts to engineer.",
+                pitfall: "Calling any general contrast in a paragraph an oxymoron. Reserve 'oxymoron' strictly for tightly paired contradictory words (adjective + noun or adverb + adjective); use 'juxtaposition' or 'antithesis' for broader contrasts.",
+                related: ["Juxtaposition", "Antithesis", "Irony & Satire"]
             },
             {
                 term: "Hyperbole",
                 cat: "Lexical & Figurative",
-                def: "Deliberate, extravagant exaggeration not meant to be taken literally.",
+                def: "Deliberate, extravagant exaggeration deployed for rhetorical emphasis, comedic satire, or emotional amplification.",
                 ex: "\"Answering a single work email on Sunday obliterates the entire weekend.\"",
-                effect: "Heightens comedic satire or amplifies emotional urgency, signaling the speaker's intense frustration or passion."
+                effect: "Heightens comedic satire or amplifies emotional urgency, signaling the speaker's intense frustration or passion.",
+                mechanism: "In Paper 1, hyperbole operates differently depending on the text's register. In satirical columns, reviews, and humorous blogs, hyperbolic exaggeration inflates minor modern irritations to apocalyptic proportions, creating comedic rapport with the reader. In commercial advertising or tabloid journalism, hyperbole magnifies the transformative power of a product or the severity of a threat to Manufacture urgency.",
+                genreExamples: [
+                    { genre: "Satirical Column", quote: "\"Receiving a 'Quick question!' Slack message at 4:58 p.m. on a Friday is a war crime against the human nervous system.\"", analysis: "Exaggerates a minor workplace annoyance into a 'war crime' to validate the shared exhaustion of white-collar readers through humor." },
+                    { genre: "Commercial Tech Ad", quote: "\"A camera sensor so revolutionary it doesn't just capture light—it bends the laws of astrophysics in your pocket.\"", analysis: "Uses grandiose scientific hyperbole to flatter the consumer into viewing a smartphone upgrade as a technological marvel." },
+                    { genre: "Restaurant / Cultural Review", quote: "\"The sourdough crust was hard enough to serve as tectonic plating for the San Andreas fault.\"", analysis: "Deploys geological hyperbole to deliver memorable, biting entertainment while critiquing culinary failure." }
+                ],
+                level7Model: "By escalating a Friday-afternoon Slack notification to a 'war crime against the human nervous system,' the writer deploys comedic hyperbole that flatters the reader's workplace frustration and builds conspiratorial rapport.",
+                pitfall: "Accusing a satirical writer of 'being dramatic or inaccurate' when they use hyperbole, which shows the examiner you missed the deliberate ironic tone (Criterion A).",
+                related: ["Litotes (Understatement)", "Irony & Satire", "Pathos (Emotion)"]
             },
             {
                 term: "Litotes (Understatement)",
                 cat: "Lexical & Figurative",
-                def: "Ironical understatement in which an affirmative is expressed by the negative of its contrary.",
+                def: "Deliberate rhetorical understatement, especially one in which an affirmative is expressed by negating its opposite.",
                 ex: "\"Melting the polar ice caps is no small inconvenience.\"",
-                effect: "Creates dry, deadpan verbal irony that highlights the enormity of a crisis by contrasting it with conspicuously restrained phrasing."
+                effect: "Creates dry, deadpan verbal irony that highlights the enormity of a crisis by contrasting it with conspicuously restrained phrasing.",
+                mechanism: "When an audience is desensitized by constant hyperbolic screaming in media, understatement cuts through the noise via restraint. By describing a catastrophic event or staggering achievement as 'not ideal' or 'no minor hiccup,' the writer creates a wide gap between the muted phrasing and the massive reality. The reader is forced to mentally supply the true scale of the issue, resulting in biting dry wit.",
+                genreExamples: [
+                    { genre: "Climate Editorial", quote: "\"Acidifying the oceans that produce half of Earth's oxygen is, to put it mildly, a somewhat suboptimal long-term strategy.\"", analysis: "Contrasts planetary asphyxiation with dry corporate understatement ('somewhat suboptimal'), mocking the tepid language of policymakers." },
+                    { genre: "Memoir / Travelogue", quote: "\"Hanging from a frayed rope three thousand feet above the Patagonian ice field was not entirely conducive to a relaxed afternoon.\"", analysis: "Uses litotes ('not entirely conducive') to project stoic, self-deprecating British-style humor amidst mortal danger." },
+                    { genre: "Financial Commentary", quote: "\"Losing forty billion dollars of pension funds in a single afternoon was no small accounting oversight.\"", analysis: "Negates the contrary ('no small oversight') to sharpen the indictment of institutional negligence." }
+                ],
+                level7Model: "Rather than matching the hysteria of tabloid coverage, the columnist deploys deadpan litotes—labeling ocean acidification 'a somewhat suboptimal strategy'—whose conspicuous restraint exposes the absurdity of political complacency.",
+                pitfall: "Misreading understatement as genuine uncertainty or low modality. Always link litotes to dry verbal irony.",
+                related: ["Hyperbole", "Irony & Satire", "Euphemism"]
             },
             {
                 term: "Euphemism",
                 cat: "Lexical & Figurative",
-                def: "A mild, indirect, or vague expression substituted for one considered harsh, blunt, or offensive.",
+                def: "A mild, indirect, clinical, or soothing expression substituted for one considered too harsh, blunt, or morally incriminating.",
                 ex: "Calling mass corporate layoffs \"workforce rightsizing\" or civilian casualties \"collateral damage.\"",
-                effect: "Sanitizes unpleasant realities to deflect guilt; in Paper 1, authors either use euphemisms to soothe readers or expose others' euphemisms to indict deceit."
+                effect: "Sanitizes unpleasant realities to deflect guilt; in Paper 1, authors either use euphemisms to soothe readers or expose others' euphemisms to indict deceit.",
+                mechanism: "George Orwell famously noted that political and corporate euphemism is designed 'to give an appearance of solidity to pure wind.' In Paper 1, you will encounter euphemism in two ways: (1) In corporate PR statements, luxury ads, or government brochures, the author uses euphemism to anesthetize the audience and mask harm; (2) In investigative articles or speeches, the author quotes an opponent's euphemism in scare quotes ('managed retreat', 'career transition') to expose its moral cowardice.",
+                genreExamples: [
+                    { genre: "Corporate PR Statement", quote: "\"To unlock operational agility, we are initiating a strategic workforce recalibration across twelve regional hubs.\"", analysis: "Replaces 'firing thousands of workers' with bloodless technocratic euphemisms ('operational agility', 'workforce recalibration') to evade public outrage." },
+                    { genre: "Advocacy Speech (Critiquing Euphemism)", quote: "\"Your diplomatic communique celebrates 'managed retreat.' In my language, 'managed retreat' means watching our ancestral graves sink beneath the tide.\"", analysis: "Quotes the bureaucratic euphemism 'managed retreat' and translates it into concrete loss to expose diplomatic evasion." },
+                    { genre: "Luxury Real Estate Brochure", quote: "\"An intimate, jewel-box studio tailored for minimalist urban living.\"", analysis: "Euphemizes a cramped, overpriced micro-apartment as 'intimate' and a 'jewel-box' to flatter the buyer's status." }
+                ],
+                level7Model: "By placing the diplomatic euphemism 'managed retreat' in ironic quotation marks and immediately contrasting it with 'submerged ancestral graves,' the speaker strips away bureaucratic sanitization to reveal the human cost of climate displacement.",
+                pitfall: "Failing to distinguish whether the writer of the stimulus text is sincerely using a euphemism to persuade the reader, or quoting someone else's euphemism to mock it.",
+                related: ["Dysphemism", "Register & Diction", "Irony & Satire"]
             },
             {
                 term: "Dysphemism",
                 cat: "Lexical & Figurative",
-                def: "Substituting a deliberately harsh, visceral, or derogatory term for a neutral one.",
+                def: "Substituting a deliberately harsh, visceral, blunt, or derogatory expression for a neutral or pleasant one.",
                 ex: "Referring to smartphones as \"dopamine pacifiers\" or fast food as \"industrial sludge.\"",
-                effect: "Strips away consumer glamour and provokes visceral disgust (pathos), forcing the audience to recoil from a normalized habit."
+                effect: "Strips away consumer glamour and provokes visceral disgust (pathos), forcing the audience to recoil from a normalized habit.",
+                mechanism: "Dysphemism is the exact inverse of euphemism. When a society has grown comfortable with a harmful habit—such as smoking, ultra-processed dieting, fast fashion, or endless scrolling—neutral terminology fails to shock. By substituting abrasive, bodily, or repulsive diction ('cancer sticks', 'electronic leashes', 'landfill rags'), the writer shatters the glossy marketing aura surrounding the product and triggers an instinctual aversion.",
+                genreExamples: [
+                    { genre: "Public Health / Anti-Vaping Ad", quote: "\"Every puff of cotton-candy vapor coats your alveoli in heavy-metal aerosol grease.\"", analysis: "Juxtaposes the infantile allure of 'cotton-candy' with the nauseating dysphemism 'heavy-metal aerosol grease' to trigger visceral revulsion in teen users." },
+                    { genre: "Travel Feature", quote: "\"Why spend your precious vacation crammed inside a pressurized aluminum cattle tube at thirty thousand feet?\"", analysis: "Replaces 'commercial airliner' with the claustrophobic dysphemism 'pressurized aluminum cattle tube' to promote slow rail travel." },
+                    { genre: "Environmental Op-Ed", quote: "\"Our coastlines have become a planetary toilet bowl for single-use convenience.\"", analysis: "Uses crude scatological dysphemism ('planetary toilet bowl') to jolt complacent consumers out of polite indifference." }
+                ],
+                level7Model: "To puncture the glamorous aura of budget aviation, Lindqvist employs the claustrophobic dysphemism 'pressurized aluminum tubes,' reducing jet travel to industrial cargo transit so that rail travel appears restorative by contrast.",
+                pitfall: "Simply calling dysphemism 'negative diction.' Using the exact term 'dysphemism' immediately boosts your Criterion D (Language) mark by showing precision.",
+                related: ["Euphemism", "Pathos (Emotion)", "Zoomorphism"]
             },
             {
                 term: "Semantic Field (Lexical Cluster)",
                 cat: "Lexical & Figurative",
-                def: "A group of words distributed across a text that belong to the same conceptual domain.",
+                def: "A cohesive network of words distributed across a text that belong to the same conceptual domain or subject area.",
                 ex: "A semantic field of incarceration (\"shackled,\" \"cell,\" \"warden,\" \"parole\") used in an article about office culture.",
-                effect: "Subliminally reinforces the central thesis across the entire text, conditioning the reader to associate the topic with the emotions of that lexical domain."
+                effect: "Subliminally reinforces the central thesis across the entire text, conditioning the reader to associate the topic with the emotions of that lexical domain.",
+                mechanism: "Analyzing a semantic field is one of the fastest ways to elevate a Paper 1 essay from Level 5 to Level 7. Rather than analyzing one isolated word at a time, you group 4–5 words from across a paragraph or text into a conceptual cluster (e.g., a semantic field of religion, pathology, warfare, incarceration, or gambling). This demonstrates to the examiner that you understand how micro-lexical choices accumulate to create a sustained macro-mood.",
+                genreExamples: [
+                    { genre: "Tech / Cultural Critique", quote: "Words distributed across an article on smartphones: \"congregation,\" \"glowing altar,\" \"genuflect,\" \"digital tithe,\" \"false idol.\"", analysis: "Constructs a semantic field of religious devotion to argue that modern society worships technology with uncritical zeal." },
+                    { genre: "Charity Appeal", quote: "Words across a hunger relief poster: \"frontline,\" \"siege,\" \"arsenal,\" \"mobilize,\" \"casualties of drought.\"", analysis: "Deploys a militaristic semantic field of warfare to frame famine relief not as passive charity, but as an urgent defensive campaign." },
+                    { genre: "Skincare Advertisement", quote: "Words across a serum webpage: \"clinical formulation,\" \"cellular synthesis,\" \"dermatological precision,\" \"micro-dosed.\"", analysis: "Uses a semantic field of laboratory medicine to lend scientific ethos (pseudoscientific authority) to a cosmetic product." }
+                ],
+                level7Model: "Throughout the second paragraph, the author weaves a pervasive semantic field of religious worship—clustering 'glowing altar,' 'genuflect,' and 'digital tithe'—to indict how seamlessly smartphone dependency has replaced spiritual contemplation.",
+                pitfall: "Listing four words from a semantic field without quoting them directly or explaining what overarching atmosphere that specific domain creates.",
+                related: ["Extended Metaphor (Conceit)", "Register & Diction", "Tone"]
             },
             {
                 term: "Register & Diction",
                 cat: "Lexical & Figurative",
-                def: "The level of formality (register) and specific word choices (diction)—ranging from colloquial slang to elevated academic or legalistic prose.",
+                def: "The level of linguistic formality (register) and specific vocabulary choices (diction)—ranging from colloquial slang to elevated academic, clinical, or legalistic prose.",
                 ex: "Shifting from clinical scientific terminology to colloquial idioms (\"let's cut to the chase\").",
-                effect: "Builds both authority (high register) and democratic relatability (colloquial register); code-switching between them bridges the gap between expert and layperson."
+                effect: "Builds both authority (high register) and democratic relatability (colloquial register); code-switching between them bridges the gap between expert and layperson.",
+                mechanism: "Register governs the social distance between writer and audience. A high, formal, Latinate register projects institutional gravitas, objectivity, and expert ethos. A low, colloquial, conversational register (using contractions, idioms, and slang) simulates an intimate chat between peers. In many high-scoring Paper 1 texts, writers deliberately execute a 'register shift'—building credibility with formal terminology before dropping into blunt colloquialism to deliver a punchy, relatable truth.",
+                genreExamples: [
+                    { genre: "Popular Science Blog", quote: "\"While neuroplasticity in the prefrontal cortex undergoes synaptic pruning during adolescence—basically, your teen's brain is doing a massive spring cleaning.\"", analysis: "Shifts abruptly from clinical neurobiology ('synaptic pruning') to domestic colloquialism ('massive spring cleaning') to educate parents without intimidating them." },
+                    { genre: "Youth Advocacy Speech", quote: "\"Your excellencies speak of multilateral decarbonization frameworks; we are telling you that we are keeping the receipts.\"", analysis: "Juxtaposes diplomatic high register against the Gen-Z colloquial idiom 'keeping the receipts' to assert youthful authenticity and accountability." },
+                    { genre: "Public Legal Notice vs. FAQ", quote: "Translating 'heretofore indemnified against third-party liability' into 'What happens if someone trips?'", analysis: "Lowers legalistic register into conversational Q&A to build consumer trust and transparency." }
+                ],
+                level7Model: "By pivoting abruptly from the elevated diplomatic register of 'multilateral frameworks' to the blunt colloquial idiom 'keeping the receipts,' the speaker punctures the formal insulation of the summit and asserts an unapologetic generational voice.",
+                pitfall: "Writing vague claims like 'the author uses simple diction so everyone can understand.' Instead, specify the exact type of register (e.g., 'conversational colloquial register' or 'clinical technocratic register') and who it targets.",
+                related: ["Ethos (Credibility)", "Synthetic Personalization", "Semantic Field (Lexical Cluster)"]
             },
             {
                 term: "Irony & Satire",
                 cat: "Lexical & Figurative",
-                def: "Expressing meaning by using language that normally signifies the opposite (verbal irony) to ridicule and reform human folly or vice (satire).",
+                def: "Expressing meaning by using language that signifies the opposite of literal truth (verbal irony) to ridicule and reform human folly, hypocrisy, or vice (satire).",
                 ex: "Praising a billionaire's \"heroic sacrifice\" of paying 1% in taxes.",
-                effect: "Flatteringly includes the reader in an 'in-group' of perceptive observers while dismantling the target's credibility through mockery."
+                effect: "Flatteringly includes the reader in an 'in-group' of perceptive observers while dismantling the target's credibility through mockery.",
+                mechanism: "Satire is not mere comedy; it is comedy weaponized for moral or political correction. Distinguish between Horatian satire (gentle, indulgent, self-deprecating humor that laughs at shared human foibles) and Juvenalian satire (biting, outraged, abrasive irony aimed at corrupt institutions). Verbal irony works by creating an 'in-group' between the writer and the perceptive reader who 'gets the joke,' isolating the target of mockery as ridiculous.",
+                genreExamples: [
+                    { genre: "Satirical Opinion Column", quote: "\"Congratulations! Thanks to your new sleep-tracking ring, you now know with 98% algorithmic certainty how exhausted you are before opening your eyes.\"", analysis: "Adopts a mock-celebratory Horatian tone to expose how biometric wellness technology increases anxiety rather than rest." },
+                    { genre: "Political Cartoon / Op-Ed", quote: "\"How noble of the fossil-fuel conglomerate to donate fifty solar lanterns to the island nation its emissions are currently submerging.\"", analysis: "Uses scathing Juvenalian verbal irony ('How noble') to highlight the obscene disproportionality of corporate greenwashing." },
+                    { genre: "Subvertising / Print Ad", quote: "An anti-smoking poster mimicking a glamorous perfume ad with the caption: 'Eau de Emphysema: Leave them breathless.'", analysis: "Parodies luxury advertising conventions to invert the association between smoking and sophistication." }
+                ],
+                level7Model: "Adopting a mock-euphoric satirical persona, Vance weaponizes verbal irony—congratulating readers on 'optimizing their souls'—to induct her white-collar audience into laughing at their own complicity in hustle culture.",
+                pitfall: "Taking ironic statements literally! Always check the provenance and overarching purpose of the text during reading time to see if praise is actually disguised ridicule.",
+                related: ["Hyperbole", "Litotes (Understatement)", "Oxymoron"]
             },
 
             // RHETORICAL & PERSUASIVE (14)
             {
                 term: "Ethos (Credibility)",
                 cat: "Rhetorical & Persuasive",
-                def: "Rhetorical appeal to the speaker's authority, moral character, lived experience, or institutional expertise.",
+                def: "Aristotelian rhetorical appeal to the speaker's authority, moral character, lived frontline experience, or institutional expertise.",
                 ex: "\"In my twenty years as an emergency room pediatric surgeon...\"",
-                effect: "Assures the sceptical reader that the author possesses both the technical competence and ethical integrity to be trusted on the issue."
+                effect: "Assures the sceptical reader that the author possesses both the technical competence and ethical integrity to be trusted on the issue.",
+                mechanism: "Before an audience will accept a writer's logical arguments (logos) or yield to their emotional appeals (pathos), they must trust the speaker's credibility (ethos). In Paper 1, always distinguish between two forms of ethos: (1) Institutional/Professional Ethos (built through academic titles, clinical register, or years of expertise) and (2) Lived-Experience/Frontline Ethos (built through personal testimony, vulnerability, and moral authenticity).",
+                genreExamples: [
+                    { genre: "Medical Public Health Column", quote: "\"In my twenty-two years intubating patients in the pediatric ICU, I have never seen a respiratory season escalate this rapidly.\"", analysis: "Establishes unimpeachable professional ethos ('twenty-two years', 'pediatric ICU') to silence lay misinformation." },
+                    { genre: "Indigenous Advocacy Speech", quote: "\"I do not come to you with a doctorate in climatology; I come with salt water in my family's well and my grandfather's fishing nets empty.\"", analysis: "Explicitly rejects academic credentials in favor of visceral frontline ethos, claiming moral authority as a primary witness." },
+                    { genre: "Charity Print Poster", quote: "Placing the official 'UNHCR Refugee Agency' crest and '92% Direct Aid Transparency Seal' in the footer.", analysis: "Visual institutional ethos that reassures hesitant donors their financial contribution will not be squandered." }
+                ],
+                level7Model: "Rather than relying on institutional credentials, Tui constructs an irreproachable ethos of frontline witness, grounding her authority in the lived reality of her grandmother's flooded courtyard in Tuvalu.",
+                pitfall: "Writing 'the author uses ethos to seem credible.' Be specific: HOW is ethos built? Through credentials, lived trauma, balanced concession, or visual logos?",
+                related: ["Logos (Logic & Evidence)", "Pathos (Emotion)", "Register & Diction"]
             },
             {
                 term: "Pathos (Emotion)",
                 cat: "Rhetorical & Persuasive",
-                def: "Rhetorical appeal targeting the audience's sympathies, fears, guilt, nostalgia, or moral outrage.",
+                def: "Aristotelian rhetorical appeal targeting the audience's emotions—such as empathy, guilt, fear, nostalgia, pride, or moral outrage.",
                 ex: "Vivid sensory descriptions of a single displaced child clutching a waterlogged toy.",
-                effect: "Bypasses detached intellectual apathy to trigger an immediate empathetic or visceral response that motivates behavioral change."
+                effect: "Bypasses detached intellectual apathy to trigger an immediate empathetic or visceral response that motivates behavioral change.",
+                mechanism: "Statistical scale often numbs human empathy (the psychological phenomenon known as 'psychic numbing': one death is a tragedy, a million is a statistic). Writers and visual designers overcome this through pathos by zooming in on a single, concrete human or animal subject, deploying sensory imagery, or triggering protective parental instincts, nostalgic longing, or acute moral guilt.",
+                genreExamples: [
+                    { genre: "Humanitarian Appeal", quote: "\"Seven-year-old Amina still carries the brass key to a front door that no longer exists in Aleppo.\"", analysis: "Uses a concrete personal detail ('brass key to a front door that no longer exists') to individualize mass displacement into heartbreaking pathos." },
+                    { genre: "Insurance / Heritage Ad", quote: "Warm, golden-hour photography of an elderly father teaching his granddaughter to ride a bicycle in a rain-softened driveway.", analysis: "Appeals to nostalgia and familial protection (positive pathos) to associate a financial product with intergenerational love." },
+                    { genre: "Environmental Poster", quote: "Extreme close-up of a sea turtle's tear-duct glistening as a plastic six-pack ring constricts its neck.", analysis: "Weaponizes visual pathos and consumer guilt, forcing the viewer to connect their casual litter with animal agony." }
+                ],
+                level7Model: "To bypass the audience's compassion fatigue toward macro-statistics, the copywriter narrows the narrative focus onto Amina's 'brass key,' a poignant symbol of lost domestic sanctuary that weaponizes protective pathos.",
+                pitfall: "Saying 'this uses pathos to make the reader feel sad/emotional.' Name the EXACT emotion engineered: e.g., 'complicit guilt,' 'visceral revulsion,' 'nostalgic warmth,' or 'protective indignation.'",
+                related: ["Ethos (Credibility)", "Logos (Logic & Evidence)", "Gaze: Demand vs. Offer"]
             },
             {
                 term: "Logos (Logic & Evidence)",
                 cat: "Rhetorical & Persuasive",
-                def: "Rhetorical appeal to reason using empirical statistics, historical precedent, syllogisms, and cause-and-effect structure.",
+                def: "Aristotelian rhetorical appeal to reason using empirical statistics, historical precedent, syllogistic deduction, and cause-and-effect structure.",
                 ex: "\"Since 73% of microplastics originate from synthetic textiles, regulating fast fashion is mathematically unavoidable.\"",
-                effect: "Provides an objective, irrefutable scaffolding that satisfies the analytical skepticism of an educated target audience."
+                effect: "Provides an objective, irrefutable scaffolding that satisfies the analytical skepticism of an educated target audience.",
+                mechanism: "Pure emotion (pathos) can be dismissed by sceptical readers as manipulative melodrama. Logos anchors an argument in empirical reality. In Paper 1, analyze not just the presence of statistics or facts, but how the writer translates or frames them: for instance, converting abstract percentages into relatable spatial analogies ('27 soccer fields every minute') or pairing a shocking statistic immediately after an emotional image.",
+                genreExamples: [
+                    { genre: "Conservation Print Ad", quote: "\"Every minute, 27 soccer fields of tropical forest are razed—releasing more carbon than the entire global aviation sector.\"", analysis: "Combines a relatable spatial unit ('27 soccer fields') with comparative empirical data to make the scale of deforestation logically undeniable." },
+                    { genre: "Economic Op-Ed", quote: "\"When municipalities invested $1 in preventative youth housing, emergency healthcare and policing costs dropped by $3.40 within forty-eight months.\"", analysis: "Uses hard cost-benefit ratio logos to persuade fiscally conservative readers who might not be moved by humanitarian appeals alone." },
+                    { genre: "Multimodal Infographic", quote: "A side-by-side bar chart comparing '118 kg CO2 (Short-Haul Flight)' vs. '1.4 kg CO2 (Electric Train)'.", analysis: "Visual logos that uses proportional bar lengths and exact figures to make the environmental choice mathematically self-evident." }
+                ],
+                level7Model: "To anchor the preceding visual pathos in empirical reality, the advertisement deploys concrete statistical logos—translating hectare loss into '27 soccer fields every minute' so the velocity of destruction is cognitively tangible.",
+                pitfall: "Assuming that quoting any number automatically equals strong analysis. Explain WHY the author chose that specific statistic or comparison for that specific audience.",
+                related: ["Ethos (Credibility)", "Pathos (Emotion)", "Pull Quotes & Callout Boxes"]
             },
             {
                 term: "Kairos (Urgency / Timeliness)",
                 cat: "Rhetorical & Persuasive",
-                def: "Appeal to the opportune, critical moment—emphasizing why action must happen *right now*.",
+                def: "Classical rhetorical appeal to the opportune, critical moment—emphasizing why an issue demands action *right now* rather than tomorrow.",
                 ex: "\"We are the last generation with a narrowing ten-year window to avert irreversible tipping points.\"",
-                effect: "Eliminates procrastination by framing the present moment as an existential crossroads where delay equals complicity."
+                effect: "Eliminates procrastination by framing the present moment as an existential crossroads where delay equals complicity.",
+                mechanism: "Even when an audience agrees with a writer's ethos, pathos, and logos, their default behavioral response is procrastination ('I'll donate later,' 'We'll fix it next decade'). Kairos destroys that temporal cushion. Through ticking-clock metaphors, temporal adverbs ('today', 'now', 'at 11:59'), and references to immediate historical turning points, the writer frames the present instant as a closing window of opportunity.",
+                genreExamples: [
+                    { genre: "Wildlife Charity Poster", quote: "\"Their clock is at 11:59. Only YOU can stop the midnight. Scan to donate today.\"", analysis: "Uses the apocalyptic metaphor of '11:59' alongside the temporal adverb 'today' to manufacture intense kairotic urgency." },
+                    { genre: "Keynote Climate Speech", quote: "\"Do not call us the leaders of tomorrow; we are your present, and the tipping point is already beneath our feet.\"", analysis: "Rejects future deferral ('tomorrow') and insists on immediate legislative reckoning ('present')." },
+                    { genre: "Digital Campaign Webpage", quote: "A live counter ticking upward in red digits: '4,812 tons of plastic dumped into oceans since you opened this page.'", analysis: "Interactive digital kairos that makes the passage of reading time itself feel costly." }
+                ],
+                level7Model: "By compressing decades of biodiversity decline into the apocalyptic metaphor of '11:59,' the copywriter manufactures acute kairotic urgency, framing any delay by the reader as a choice to allow extinction.",
+                pitfall: "Forgetting to connect temporal adverbs ('now', 'today', 'immediately') and countdown imagery to the rhetorical term 'kairos'.",
+                related: ["Modality (High vs. Low)", "Parataxis (Short/Truncated Syntax)", "Anaphora"]
             },
             {
                 term: "Anaphora",
                 cat: "Rhetorical & Persuasive",
-                def: "Repetition of a word or phrase at the beginning of successive clauses or sentences.",
+                def: "Deliberate repetition of a word or phrase at the beginning of successive clauses, sentences, or paragraphs.",
                 ex: "\"We cannot wait for legislation. We cannot wait for corporations. We cannot wait for permission.\"",
-                effect: "Builds a relentless, percussive rhetorical momentum that hammers the core message into the audience's memory and projects unwavering conviction."
+                effect: "Builds a relentless, percussive rhetorical momentum that hammers the core message into the audience's memory and projects unwavering conviction.",
+                mechanism: "Originating in oralatory traditions, anaphora acts like a rhythmic drumbeat in prose and speeches. Each repeated opening phrase raises the emotional temperature of the passage, creating syntactic expectation in the listener. When combined with a tricolon (three parallel clauses) that escalates in intensity, anaphora makes the speaker's conclusion feel like an unstoppable moral tide.",
+                genreExamples: [
+                    { genre: "Political / Protest Speech", quote: "\"We are tired of hollow summits. We are tired of non-binding pledges. We are tired of being asked to be patient while our future burns.\"", analysis: "The anaphoric repetition of 'We are tired of...' channels collective generational exhaustion into a unified indictment of authority." },
+                    { genre: "Manifesto / Op-Ed", quote: "\"Every click is recorded. Every pause is monetized. Every insecurity is auctioned to the highest bidder.\"", analysis: "Uses the anaphoric determiner 'Every...' across three short sentences to convey the inescapable totality of digital surveillance." },
+                    { genre: "Charity Print Copy", quote: "\"No child should drink from a ditch. No mother should fear a glass of water. No community should be forgotten.\"", analysis: "Repeats the negative high-modality opening 'No [noun] should...' to establish universal moral baselines." }
+                ],
+                level7Model: "Culminating in the anaphoric repetition of 'We cannot wait for...', the speaker constructs a percussive rhetorical crescendo that projects unwavering collective resolve and closes off avenues for diplomatic delay.",
+                pitfall: "Calling ANY repetition in a text 'anaphora.' Anaphora specifically requires repetition at the BEGINNING of successive clauses; repetition at the end of clauses is 'epistrophe'.",
+                related: ["Tricolon (Rule of Three)", "Parallelism (Isocolon)", "Kairos (Urgency / Timeliness)"]
             },
             {
                 term: "Tricolon (Rule of Three)",
                 cat: "Rhetorical & Persuasive",
-                def: "A series of three parallel words, phrases, or clauses placed in succession.",
+                def: "A series of three parallel words, phrases, or clauses placed in immediate succession to create rhythm and completeness.",
                 ex: "\"Faster feeds, shorter attention, shallower lives.\"",
-                effect: "Creates a sense of rhythmic completeness and rhetorical inevitability, making a subjective claim sound like a self-evident truth."
+                effect: "Creates a sense of rhythmic completeness and rhetorical inevitability, making a subjective claim sound like a self-evident truth.",
+                mechanism: "In cognitive psychology and classical rhetoric, two items create a comparison, while three items establish a complete pattern. Writers deploy tricolons—especially ascending tricolons (where the third element is the longest or most emotionally severe)—to package complex arguments into memorable, quotable soundbites that linger in the audience's mind long after reading.",
+                genreExamples: [
+                    { genre: "Cultural Op-Ed", quote: "\"The attention economy promises us faster feeds, shorter focus, and shallower lives.\"", analysis: "Uses a tightly balanced comparative tricolon that progresses from a technical feature ('faster feeds') to an existential tragedy ('shallower lives')." },
+                    { genre: "Keynote Speech", quote: "\"Sign the treaty today. Fund the facility today. Look us in the eye when you vote today.\"", analysis: "Combines an imperative tricolon with epistrophe ('today') to escalate from bureaucratic action to personal moral confrontation." },
+                    { genre: "Eco-Travel Webpage", quote: "\"Unplug the phone, watch the fjord unfold, and remember how to breathe.\"", analysis: "Guides the reader through a three-step chronological transformation from digital detachment to sensory restoration." }
+                ],
+                level7Model: "Through the ascending tricolon 'faster feeds, shorter focus, and shallower lives,' the columnist creates a rhythmic chain of cause and effect, making the spiritual erosion caused by social media sound mathematically inevitable.",
+                pitfall: "Spotting a rule of three without analyzing the progression from the first item to the third item (e.g., how the third element delivers the emotional climax).",
+                related: ["Anaphora", "Parallelism (Isocolon)", "Asyndeton"]
             },
             {
                 term: "Asyndeton",
                 cat: "Rhetorical & Persuasive",
-                def: "Deliberate omission of conjunctions (and, or) between a series of related clauses.",
+                def: "The deliberate omission of coordinating conjunctions ('and', 'or') between a series of related words, phrases, or clauses.",
                 ex: "\"Wake, scroll, commute, consume, sleep, repeat.\"",
-                effect: "Accelerates syntactic pacing to mimic breathlessness, relentless mechanical routine, or an overwhelming accumulation of crises."
+                effect: "Accelerates syntactic pacing to mimic breathlessness, relentless mechanical routine, or an overwhelming accumulation of crises.",
+                mechanism: "By stripping away the final 'and' that normally signals the end of a list, asyndeton removes the syntactic brakes from a sentence. The items pile atop one another at high velocity, leaving the reader feeling breathless or besieged. Moreover, omitting 'and' implies that the list is unfinished and could continue infinitely, making it ideal for depicting endless modern routines or relentless crises.",
+                genreExamples: [
+                    { genre: "Satirical Column on Hustle Culture", quote: "\"Track the REM cycle, log the hydration, monetize the hobby, audit the joy, collapse, repeat.\"", analysis: "Omits conjunctions to create a frantic, assembly-line rhythm that formally mirrors the exhaustion of an over-optimized life." },
+                    { genre: "War / Crisis Journalism", quote: "\"Sirens wailing, rubble falling, mothers calling out in the dust, ambulances gridlocked.\"", analysis: "Uses asyndetic participles to immerse the reader in the chaotic, simultaneous sensory overload of an emergency zone." },
+                    { genre: "Anti-Consumerism Essay", quote: "\"Plastic forks, plastic wrappers, plastic straws, plastic bags—a synthetic crust sealing the earth.\"", analysis: "Piles up noun phrases without conjunctions to mimic the suffocating accumulation of non-biodegradable waste." }
+                ],
+                level7Model: "By deploying asyndeton in the imperative chain 'Track the REM cycle, log the hydration, monetize the hobby,' Vance strips away coordinating conjunctions to accelerate the syntactic pace, forcing the reader to experience the breathless monotony of hustle culture.",
+                pitfall: "Confusing asyndeton (NO conjunctions) with polysyndeton (MANY conjunctions). Remember: 'A-' = without (like asymmetrical).",
+                related: ["Polysyndeton", "Tricolon (Rule of Three)", "Parataxis (Short/Truncated Syntax)"]
             },
             {
                 term: "Polysyndeton",
                 cat: "Rhetorical & Persuasive",
-                def: "Deliberate repetition of conjunctions in close succession where they would normally be omitted.",
+                def: "The deliberate repetition of coordinating conjunctions ('and', 'or', 'nor') in close succession where commas would normally suffice.",
                 ex: "\"They promised lower emissions and greener cities and transparent audits and ethical supply chains—yet delivered none.\"",
-                effect: "Slows the pace to create a sense of exhausting abundance, piling up burdens or broken promises until the reader feels weighed down."
+                effect: "Slows the pace to create a sense of exhausting abundance, piling up burdens or broken promises until the reader feels weighed down.",
+                mechanism: "Whereas asyndeton speeds a sentence up, polysyndeton drags the pacing down by forcing the reader to step over every single 'and'. Each item in the list is given equal, heavy emphasis. Writers use this syntactic drag to convey an exhausting accumulation of chores, a staggering catalogue of corporate sins, or a childlike sense of overwhelming wonder.",
+                genreExamples: [
+                    { genre: "Environmental Exposé", quote: "\"Into the river went the dye runoff and the microfibers and the heavy metals and the bleached sludge—day after day.\"", analysis: "Repeats 'and' between every pollutant to make the toxic dumping feel relentless, heavy, and unending." },
+                    { genre: "Working-Parent Memoir", quote: "\"Before 8 a.m. you pack the lunches and sign the permission slips and answer the client in London and wipe the spilled oatmeal.\"", analysis: "Uses polysyndeton to formally enact the cognitive fatigue of invisible domestic labor." },
+                    { genre: "Travel Writing", quote: "\"Inside the souk there were mountains of saffron and hammered copper lanterns and bolts of indigo silk and the scent of roasting cardamom.\"", analysis: "Creates a lush, lingering sensory abundance that immerses the reader in the exotic setting." }
+                ],
+                level7Model: "Through the heavy polysyndeton of 'the dye runoff and the microfibers and the heavy metals,' the writer slows the cadence of the sentence, forcing the reader to register each toxic pollutant as a distinct, cumulative weight upon the ecosystem.",
+                pitfall: "Identifying the repeated 'ands' without explaining how the slowed rhythm mirrors the thematic weight or exhaustion of the content.",
+                related: ["Asyndeton", "Hypotaxis (Complex/Multi-Clausal Syntax)", "Parallelism (Isocolon)"]
             },
             {
                 term: "Hypophora",
                 cat: "Rhetorical & Persuasive",
-                def: "A figure of speech in which the speaker poses a question and then immediately answers it themselves.",
+                def: "A rhetorical figure in which the speaker poses a direct question and then immediately answers it themselves.",
                 ex: "\"Why do tech executives ban their own children from using these apps? Because they know the blueprint is addictive.\"",
-                effect: "Anticipates and voices the reader's exact skepticism, creating the illusion of an open dialogue while keeping total control over the conclusion."
+                effect: "Anticipates and voices the reader's exact skepticism, creating the illusion of an open dialogue while keeping total control over the conclusion.",
+                mechanism: "Unlike a standalone rhetorical question (which leaves the answer implied), hypophora explicitly stages a Q&A session inside the text. By voicing the exact counter-argument or doubt that a sceptical reader is thinking—and then immediately demolishing it with a punchy, authoritative answer—the writer projects confidence, transparency, and conversational control.",
+                genreExamples: [
+                    { genre: "Keynote Advocacy Speech", quote: "\"What is 'managed retreat' when translated into my language? It is the polite erasure of a sovereign nation.\"", analysis: "Poses the interpretive question and immediately supplies a devastating definition, seizing control of the diplomatic vocabulary." },
+                    { genre: "Public Health FAQ / Brochure", quote: "\"Can a 20-minute daily walk really slash cardiovascular risk by a third? The clinical data says yes—and here is why.\"", analysis: "Anticipates the reader's disbelief at a simple solution and immediately reassures them with scientific authority." },
+                    { genre: "Investigative Op-Ed", quote: "\"So why do Silicon Valley architects send their own children to screen-free Waldorf schools? Because no dealer gets high on their own supply.\"", analysis: "Uses hypophora to deliver a stinging, colloquial punchline that exposes industry hypocrisy." }
+                ],
+                level7Model: "By deploying hypophora—asking 'What is managed retreat in my language?' and immediately answering 'It is the polite erasure of a sovereign nation'—Tui simulates democratic dialogue while locking the audience into her uncompromising moral verdict.",
+                pitfall: "Labeling a question that the author immediately answers as a 'rhetorical question.' Calling it 'hypophora' shows superior technical command (Criterion D).",
+                related: ["Rhetorical Question", "Antithesis", "Ethos (Credibility)"]
             },
             {
                 term: "Rhetorical Question",
                 cat: "Rhetorical & Persuasive",
-                def: "A question asked not to elicit information, but to assert an implied, self-evident answer.",
+                def: "A question posed not to elicit an informational reply, but to assert an implied, self-evident truth that the audience must mentally affirm.",
                 ex: "\"At what point did we agree to auction off our private interior lives for free photo storage?\"",
-                effect: "Compels active cognitive participation; because the reader supplies the implied answer internally, they feel ownership over the author's critique."
+                effect: "Compels active cognitive participation; because the reader supplies the implied answer internally, they feel ownership over the author's critique.",
+                mechanism: "When a writer states a declarative claim ('We shouldn't trade privacy for convenience'), a defensive reader can resist it. When the writer frames that same claim as a pointed rhetorical question, the reader's brain automatically answers it to resolve the syntactic prompt. This recruits the audience as an active co-constructor of the argument, Often deployed at paragraph openings (to pivot topics) or conclusions (to leave a lingering provocation).",
+                genreExamples: [
+                    { genre: "Opinion Column", quote: "\"When did we become so terrified of an unmeasured hour?\"", analysis: "Placed at the structural volta of the essay, this quiet rhetorical question forces the productivity-obsessed reader into intimate self-reflection." },
+                    { genre: "Charity Print Ad", quote: "\"If this were your daughter's drinking water, how long would you wait to act?\"", analysis: "Combines synthetic personalization ('your daughter') with an unanswerable rhetorical question to shatter parental detachment." },
+                    { genre: "Environmental Speech", quote: "\"How do you negotiate a compromise with the laws of physics?\"", analysis: "Uses an ironic rhetorical question to expose the futility of political bargaining against scientific reality." }
+                ],
+                level7Model: "Pivoting at the essay's structural volta, Vance poses the piercing rhetorical question, 'When did we become so terrified of an unmeasured hour?'—compelling the reader to internalize the critique through quiet self-interrogation.",
+                pitfall: "Writing 'the rhetorical question makes the reader think.' Examiners hate this cliché! Always specify the EXACT implied answer the reader is forced to supply.",
+                related: ["Hypophora", "Synthetic Personalization", "Shift / Volta (Tonal Pivot)"]
             },
             {
                 term: "Antithesis",
                 cat: "Rhetorical & Persuasive",
-                def: "Juxtaposition of contrasting ideas in balanced, parallel grammatical structures.",
+                def: "The juxtaposition of sharply contrasting ideas within balanced, parallel grammatical structures.",
                 ex: "\"Algorithms are designed to maximize engagement, not to cultivate enlightenment.\"",
-                effect: "Presents a complex debate as a stark binary choice, clarifying the author's moral stance through crisp syntactic symmetry."
+                effect: "Presents a complex debate as a stark binary choice, clarifying the author's moral stance through crisp syntactic symmetry.",
+                mechanism: "Antithesis marries conceptual contrast (juxtaposition) with grammatical symmetry (parallelism), often structured around 'not X, but Y' or balanced semicolon clauses. Because the two halves of the sentence mirror each other syntactically, the conceptual opposition between the two ideas stands out in razor-sharp relief. It is a favorite weapon of speechwriters and editorialists for creating unforgettable thesis statements.",
+                genreExamples: [
+                    { genre: "Political / Youth Speech", quote: "\"We are not your future; we are your present.\"", analysis: "Uses crisp antithetical parallelism ('not your future' / 'your present') to collapse the temporal buffer politicians use to delay climate action." },
+                    { genre: "Tech Ethics Essay", quote: "\"These platforms were engineered to monetize outrage, not to nurture understanding.\"", analysis: "Balances infinitive verbs ('to monetize' vs. 'to nurture') and abstract nouns ('outrage' vs. 'understanding') to indict social media design." },
+                    { genre: "Sustainable Brand Manifesto", quote: "\"Buy less to own longer; slow down to go further.\"", analysis: "Uses paradoxical antithesis in an advertising slogan to make ethical restraint sound empowering." }
+                ],
+                level7Model: "Through the balanced antithesis 'We are not your future; we are your present,' the speaker weaponizes syntactic symmetry to strip delegates of their habit of deferring ecological responsibility onto the next generation.",
+                pitfall: "Calling any contrast an antithesis. Antithesis specifically requires PARALLEL grammatical structure alongside opposing ideas.",
+                related: ["Juxtaposition", "Parallelism (Isocolon)", "Oxymoron"]
             },
             {
                 term: "Inclusive vs. Exclusive Pronouns",
                 cat: "Rhetorical & Persuasive",
-                def: "Strategic deployment of collective first-person ('we', 'us', 'our') versus distancing third-person ('they', 'them').",
+                def: "The strategic oscillation between collective first-person pronouns ('we', 'us', 'our') and distancing third-person or second-person pronouns ('they', 'them', 'you').",
                 ex: "\"We are paying the ecological debt that they accumulated in boardrooms.\"",
-                effect: "Forges solidarity between writer and audience ('we') while constructing an external antagonist ('they') to channel collective indignation."
+                effect: "Forges solidarity between writer and audience ('we') while constructing an external antagonist ('they') to channel collective indignation.",
+                mechanism: "Pronouns are the invisible architecture of social alignment in persuasive texts. Inclusive pronouns ('we', 'our') dissolve the hierarchy between writer and reader, creating a shared moral community or distributing collective complicity so the reader doesn't feel defensively attacked. Conversely, exclusive pronouns ('they', 'their', or an accusatory 'you') draw a sharp battle line, isolating corrupt elites or forcing personal accountability.",
+                genreExamples: [
+                    { genre: "Advocacy Speech", quote: "\"Your communique celebrates 'net-zero by 2050,' while our ancestral islands slip beneath the tide.\"", analysis: "Polarizes 'your' (insulated diplomats) against 'our' (frontline islanders) to put the conference hall on moral trial." },
+                    { genre: "Cultural Column", quote: "\"Having strip-mined our waking hours for output, we have now surrendered our dreams to the tracker.\"", analysis: "Shifts from earlier satirical 'you' to inclusive 'we/our', positioning the writer alongside the reader as a fellow victim of burnout." },
+                    { genre: "Charity Appeal", quote: "\"WHEN THEY RUN OUT OF AIR, SO DO YOU. Protect our shared breath.\"", analysis: "Progresses strategically from 'THEY' (the forest) to 'YOU' (the isolated reader) and finally unites both in 'our shared breath'." }
+                ],
+                level7Model: "By pivoting from the accusatory 'YOU' in the headline to the restorative inclusive pronoun 'our' in the final call-to-action ('Protect our shared breath'), the advertisement repairs the division between humanity and nature, uniting both in a single respiratory fate.",
+                pitfall: "Noticing 'we' in a text and just saying 'it includes the reader.' Track how pronouns SHIFT across the text (e.g., from 'you' to 'we', or pitting 'us' against 'them').",
+                related: ["Synthetic Personalization", "Tone", "Ethos (Credibility)"]
             },
             {
                 term: "Modality (High vs. Low)",
                 cat: "Rhetorical & Persuasive",
-                def: "Auxiliary verbs and adverbs expressing degrees of certainty, necessity, or obligation (e.g., 'must', 'will', 'undoubtedly' vs. 'might', 'could').",
+                def: "The selection of auxiliary verbs and adverbs that express degrees of certainty, necessity, obligation, or possibility ('must', 'will', 'undoubtedly' vs. 'might', 'could', 'perhaps').",
                 ex: "\"We must dismantle this framework; we cannot merely reform it.\"",
-                effect: "High modality projects uncompromising authority and moral certainty, closing off middle-ground complacency for the reader."
+                effect: "High modality projects uncompromising authority and moral certainty, closing off middle-ground complacency for the reader.",
+                mechanism: "Modality reveals the speaker's epistemic confidence and deontic authority. Low modality ('could', 'may', 'arguably', 'tends to') projects cautious academic objectivity, humility, or tentative exploration. High modality ('must', 'will', 'never', 'undeniably', 'cannot') projects prophetic certainty and urgent moral obligation. Tracking a shift from low modality (in an exploratory opening) to high modality (in a decisive conclusion) is a hallmark of Level 7 linguistic analysis.",
+                genreExamples: [
+                    { genre: "Charity Headline", quote: "\"WHEN THEY RUN OUT OF AIR, SO DO YOU.\"", analysis: "Chooses the high-modality temporal certainty of 'WHEN' over the low-modality conditional 'IF', framing ecological collapse as inevitable without intervention." },
+                    { genre: "Manifesto / Speech", quote: "\"We must halt new fossil-fuel extraction today; we cannot bargain with atmospheric chemistry.\"", analysis: "Pairs deontic high-modality auxiliaries ('must', 'cannot') to eliminate diplomatic compromise." },
+                    { genre: "Popular Science Article", quote: "\"Early trials suggest that intermittent digital fasting might partially reverse attention fragmentation.\"", analysis: "Uses measured low modality ('suggest', 'might partially') to build trustworthy scientific ethos by avoiding sensationalist overclaiming." }
+                ],
+                level7Model: "Crucially, the copywriter selects the high-modality conjunction 'WHEN' rather than the conditional 'IF,' eliminating probabilistic doubt and framing deforestation as a guaranteed existential catastrophe.",
+                pitfall: "Ignoring small auxiliary verbs like 'must', 'will', 'can', and 'should'. In IB Lang & Lit, analyzing modality proves deep grammatical engagement with language.",
+                related: ["Kairos (Urgency / Timeliness)", "Parataxis (Short/Truncated Syntax)", "Ethos (Credibility)"]
             },
             {
                 term: "Synthetic Personalization",
                 cat: "Rhetorical & Persuasive",
-                def: "Addressing a mass audience of strangers as though speaking intimately to a single individual via second-person pronouns ('you', 'your').",
+                def: "Coined by linguist Norman Fairclough: the technique of addressing a mass audience of millions as though speaking intimately to a single individual via second-person pronouns ('you', 'your').",
                 ex: "\"Your morning coffee shouldn't cost the earth.\"",
-                effect: "Simulates personal rapport in commercial or charity copy, isolating the individual reader so they cannot diffuse responsibility onto the crowd."
+                effect: "Simulates personal rapport in commercial or charity copy, isolating the individual reader so they cannot diffuse responsibility onto the crowd.",
+                mechanism: "In mass media—advertisements, charity posters, lifestyle blogs, and commercial webpages—the creator does not actually know the reader. Yet by deploying direct second-person address ('you', 'your'), conversational idioms, and tailored assumptions, the text manufactures a simulated one-on-one intimacy. In commercial ads, this flatters the consumer's individuality; in public service appeals, it prevents the 'bystander effect' by pointing a finger directly at the solitary reader.",
+                genreExamples: [
+                    { genre: "Wildlife Charity Poster", quote: "\"Their clock is at 11:59. Only YOU can stop the midnight.\"", analysis: "Capitalizes 'YOU' to single out the individual magazine reader from the anonymous public, making them feel solely responsible for the tiger's survival." },
+                    { genre: "Cosmetic / Lifestyle Ad", quote: "\"Because your skin has its own story—and it deserves a formula written just for you.\"", analysis: "Uses synthetic personalization ('your skin', 'just for you') to disguise a mass-manufactured commodity as bespoke care." },
+                    { genre: "Satirical Column", quote: "\"Before you even dare to open your bedroom curtains, you dutifully consult your wrist-bound overlord.\"", analysis: "Uses second-person address to make the reader feel uncomfortably spied upon in their own morning habits." }
+                ],
+                level7Model: "Deploying Norman Fairclough's concept of synthetic personalization, the copy juxtaposes the helpless third-person 'Their' against the capitalized 'YOU,' piercing the bystander effect so the solitary reader feels personally accountable.",
+                pitfall: "Simply writing 'the author uses the word you to talk to the reader.' Using the exact linguistic term 'synthetic personalization' guarantees top marks in Criterion D.",
+                related: ["Inclusive vs. Exclusive Pronouns", "Gaze: Demand vs. Offer", "Rhetorical Question"]
             },
 
             // SYNTACTIC & STRUCTURAL (12)
             {
                 term: "Parataxis (Short/Truncated Syntax)",
                 cat: "Syntactic & Structural",
-                def: "Placing short, simple independent clauses side by side without subordinating conjunctions.",
+                def: "Placing short, simple independent clauses or sentence fragments side by side without subordinating conjunctions.",
                 ex: "\"The glacier calved. The sea rose. Nobody looked up.\"",
-                effect: "Delivers blunt, punchy finality; when placed after a long complex sentence, a truncated sentence acts as a structural hammer blow."
+                effect: "Delivers blunt, punchy finality; when placed after a long complex sentence, a truncated sentence acts as a structural hammer blow.",
+                mechanism: "Syntax controls the pacing and emotional cadence of a text. While long sentences invite reflection, short paratactic sentences—or abrupt one- to three-word minor sentences ('Act now.' 'Period.' 'Full stop.')—disallow debate. They project stark objectivity, emotional numbness, or urgent command. Always look for where a writer follows a long, winding paragraph with an abrupt three-word sentence: that contrast creates maximum structural salience.",
+                genreExamples: [
+                    { genre: "Travel Feature (Critiquing Airports)", quote: "\"Fluorescent security queues. Plastic trays. Pressurized aluminum tubes.\"", analysis: "Uses clipped nominal sentence fragments (parataxis) to mimic the choppy, dehumanizing conveyor-belt experience of budget air travel." },
+                    { genre: "Charity Appeal Footer", quote: "\"Every minute, 27 soccer fields are razed. Protect our shared breath. Act now.\"", analysis: "Concludes with a progressively shortening syntactic countdown that terminates in the two-word imperative 'Act now.'" },
+                    { genre: "Trauma / Crisis Memoir", quote: "\"The sirens stopped. The dust settled. The street was gone.\"", analysis: "Uses stark, unadorned three-word clauses to convey the numb, shell-shocked disbelief of a survivor." }
+                ],
+                level7Model: "After three long hypotactic sentences cataloging corporate excuses, the author drops an abrupt paratactic hammer blow—'The ice does not negotiate.'—whose syntactic brevity projects irrefutable scientific finality.",
+                pitfall: "Analyzing sentence length in isolation without explaining how the rhythm mimics the content (form enacting meaning) or contrasts with surrounding sentences.",
+                related: ["Hypotaxis (Complex/Multi-Clausal Syntax)", "Asyndeton", "Kairos (Urgency / Timeliness)"]
             },
             {
                 term: "Hypotaxis (Complex/Multi-Clausal Syntax)",
                 cat: "Syntactic & Structural",
-                def: "Long, layered sentences using subordinate clauses to show logical hierarchy, qualification, or chronological complexity.",
+                def: "Long, layered sentences constructed with multiple subordinate and dependent clauses to show logical hierarchy, nuance, or flowing immersion.",
                 ex: "\"Although consumer convenience has undeniably improved, when we examine the supply chains that underwrite same-day delivery, the human cost becomes indefensible.\"",
-                effect: "Mirrors sophisticated intellectual nuance, building a cumulative chain of reasoning before arriving at an inescapable verdict."
+                effect: "Mirrors sophisticated intellectual nuance, building a cumulative chain of reasoning or sensory immersion before arriving at a verdict.",
+                mechanism: "Hypotaxis uses subordinating conjunctions ('although', 'because', 'whereas', 'while') and relative clauses to establish cause-and-effect relationships and weigh competing perspectives. In editorial writing, hypotactic syntax builds ethos by showing a measured, analytical mind that concedes counter-arguments ('Although X is true...') before subordinating them to the main thesis ('...Y is far more urgent'). In descriptive travel writing, long hypotactic sentences mimic unhurried tranquility.",
+                genreExamples: [
+                    { genre: "Eco-Travel Webpage", quote: "\"Aboard the Bergensbanen, the landscape does not snap past in digital cuts; it unspools in a seven-hour cinema of silver waterfalls, lichen-draped boulders, and the soft, rhythmic clack-hum of steel rails.\"", analysis: "Elongates the syntax with cascading descriptive clauses to formally slow the reader's breathing and mirror the unhurried pace of the train." },
+                    { genre: "Broadsheet Editorial", quote: "\"While proponents of algorithmic curation rightly point to the democratization of niche creators, until platforms disclose their engagement weights, public trust will remain fractured.\"", analysis: "Uses a subordinate concession clause ('While proponents...') to demonstrate fair-minded ethos before delivering the core critique." },
+                    { genre: "Satirical Essay", quote: "A winding 65-word sentence detailing fifteen steps of a morning bio-hacking routine before the narrator has even brushed their teeth.", analysis: "Uses labyrinthine hypotaxis to satirize how exhausting self-improvement rituals have become." }
+                ],
+                level7Model: "Transitioning into the rail section, Lindqvist shifts from clipped fragments to meandering hypotactic syntax, allowing the cascading clauses to formally enact the unhurried serenity of the seven-hour train journey.",
+                pitfall: "Saying 'the author uses long sentences to give lots of detail.' Connect the multi-clausal rhythm directly to intellectual nuance, sensory deceleration, or overwhelming exhaustion.",
+                related: ["Parataxis (Short/Truncated Syntax)", "Periodic Sentence", "Polysyndeton"]
             },
             {
                 term: "Periodic Sentence",
                 cat: "Syntactic & Structural",
-                def: "A complex sentence in which the main clause is withheld until the very end, preceded by dependent phrases.",
+                def: "A suspenseful complex sentence in which the main independent clause is withheld until the very end, preceded by a series of dependent phrases or clauses.",
                 ex: "\"Stripped of its glossy marketing, deprived of its celebrity endorsements, and audited for its carbon footprint, the campaign collapses.\"",
-                effect: "Generates syntactic suspense, forcing the reader to hold multiple qualifiers in mind until the climactic resolution lands at the period."
+                effect: "Generates syntactic suspense, forcing the reader to hold multiple qualifiers or images in mind until the climactic resolution lands at the period.",
+                mechanism: "In a standard 'loose' sentence, the main point comes first followed by modifiers. A periodic sentence inverts this architecture: by front-loading participial phrases, conditional clauses, or historical context, the writer delays grammatical completion. The reader is held in cognitive suspense until the final words drop the decisive subject and verb, giving the conclusion maximum rhetorical punch.",
+                genreExamples: [
+                    { genre: "Investigative Op-Ed", quote: "\"Stripped of its glossy 'net-zero' slogans, deprived of its carbon-offset accounting tricks, and audited against actual smokestack emissions, the corporation's pledge is a fraud.\"", analysis: "Builds three parallel participial phrases that systematically peel back greenwashing layers before landing on the blunt verdict: 'the corporation's pledge is a fraud.'" },
+                    { genre: "Keynote Speech", quote: "\"If not this generation, if not in this legislative chamber, if not while the glaciers still feed our rivers, then never.\"", analysis: "Suspends three anaphoric conditional clauses to build unbearable urgency before the two-word climax." },
+                    { genre: "Memoir / Profile", quote: "\"After forty years of silence, three continental migrations, and a lifetime of locked drawers, my grandmother finally opened the suitcase.\"", analysis: "Uses periodic delay to mirror the decades of waiting before the emotional revelation." }
+                ],
+                level7Model: "Constructing a suspenseful periodic sentence that front-loads three participial clauses—'Stripped of... deprived of... audited for...'—the journalist systematically dismantles the company's PR defenses before delivering the climactic final clause.",
+                pitfall: "Failing to notice how withholding the main verb until the end of the sentence manipulates the reader's anticipation.",
+                related: ["Hypotaxis (Complex/Multi-Clausal Syntax)", "Tricolon (Rule of Three)", "Parallelism (Isocolon)"]
             },
             {
                 term: "Parallelism (Isocolon)",
                 cat: "Syntactic & Structural",
-                def: "Successive clauses or sentences constructed with identical grammatical structure and rhythm.",
+                def: "The arrangement of successive clauses, phrases, or sentences with identical or mirrored grammatical structure and rhythm.",
                 ex: "\"They privatize the profits; they socialize the losses.\"",
-                effect: "Imparts memorable cadence and logical equipoise, making contrasts or equivalences feel balanced and authoritative."
+                effect: "Imparts memorable cadence and logical equipoise, making contrasts or equivalences feel balanced, inevitable, and authoritative.",
+                mechanism: "When two or more clauses share the exact same syntactic blueprint (e.g., Pronoun + Transitive Verb + Definite Article + Plural Noun), the human ear perceives an underlying order and authority. Even more specifically, when the parallel clauses have identical syllable counts or length, it is called an 'isocolon'. Writers use parallelism either to equate two seemingly distant things or to sharpen an antithesis.",
+                genreExamples: [
+                    { genre: "Economic Critique", quote: "\"In boom years, they privatize the profits; in bailout years, they socialize the losses.\"", analysis: "Uses razor-sharp isocolon parallelism to expose the double standard of corporate bailouts in a memorable, quotable maxim." },
+                    { genre: "Charity Print Ad", quote: "\"When they run out of air, so do you.\"", analysis: "Balances the subordinate clause against the main clause to equate rainforest survival with human survival." },
+                    { genre: "Fitness / Lifestyle Ad", quote: "\"Train with intention. Recover with science. Live without limits.\"", analysis: "Deploys three parallel imperative + prepositional phrase structures to project disciplined mastery." }
+                ],
+                level7Model: "Through the symmetrical isocolon 'they privatize the profits; they socialize the losses,' the columnist uses grammatical balance to expose economic imbalance, making the critique of corporate bailouts ring like an indisputable proverb.",
+                pitfall: "Confusing parallelism (repeated grammatical structure) with anaphora (repeated exact opening words). Often they work together, so name both!",
+                related: ["Antithesis", "Anaphora", "Tricolon (Rule of Three)"]
             },
             {
                 term: "Caesura (Internal Punctuation)",
                 cat: "Syntactic & Structural",
-                def: "A deliberate structural pause within a sentence created by em-dashes, colons, semicolons, or parentheticals.",
+                def: "A deliberate, dramatic structural pause engineered inside a sentence through em-dashes (—), colons (:), semicolons (;), ellipses (...), or parentheses.",
                 ex: "\"We have every tool required to solve this crisis—except the political spine.\"",
-                effect: "Disrupts the rhythmic flow to isolate and spotlight a satirical twist, parenthetical confession, or shocking statistic."
+                effect: "Disrupts the rhythmic flow to isolate and spotlight a satirical twist, parenthetical confession, or shocking revelation.",
+                mechanism: "In modern non-literary prose—especially columns, blogs, and ad copy—punctuation is theatrical stage direction. An em-dash (—) acts as a sudden conversational pivot or ironic sting in the tail; a colon (:) acts as a trumpeted drumroll announcing a revelation; parenthetical asides () act as a conspiratorial whisper to the reader that builds intimate rapport.",
+                genreExamples: [
+                    { genre: "Opinion Column", quote: "\"Late-stage productivity has now planted its flag in the last uncolonized territory: our dreams and our stillness.\"", analysis: "Uses the colon as a dramatic syntactic pivot that halts the clause and spotlights the tragic answer ('our dreams and our stillness')." },
+                    { genre: "Satirical Essay", quote: "\"The wellness retreat costs $4,000 a weekend (organic yak-milk smoothie bowl sold separately) to teach you how to breathe.\"", analysis: "Deploys a parenthetical aside as a conspiratorial whisper that undercuts the retreat's spiritual pretentiousness with commercial reality." },
+                    { genre: "Advocacy Speech", quote: "\"Do not call us the leaders of tomorrow; we are not your future—we are your present.\"", analysis: "Combines a semicolon and an em-dash to create a two-stage rhythmic disruption that hammers home the generational demand." }
+                ],
+                level7Model: "By inserting an abrupt em-dash before the final clause—'except the political spine'—the editorialist creates a sharp syntactic caesura that isolates political cowardice as the sole obstacle to climate progress.",
+                pitfall: "Ignoring punctuation marks! Analyzing a colon, em-dash, or parenthetical whisper is one of the easiest ways to demonstrate micro-level Criterion B sophistication.",
+                related: ["Parataxis (Short/Truncated Syntax)", "Irony & Satire", "Periodic Sentence"]
             },
             {
                 term: "Shift / Volta (Tonal Pivot)",
                 cat: "Syntactic & Structural",
-                def: "The structural turning point in a text where the tone, focus, or argument pivots sharply.",
+                def: "The macro-structural turning point in a text where the tone, register, visual palette, or rhetorical direction pivots sharply.",
                 ex: "Moving from three paragraphs of bleak ecological despair to a hopeful, empowering call-to-action in the final third.",
-                effect: "Prevents reader fatigue or fatalism; the writer first unsettles the audience and then pivots to offer a constructive avenue for agency."
+                effect: "Prevents reader fatigue or fatalism; the writer first unsettles or entertains the audience and then pivots to offer a constructive or sobering resolution.",
+                mechanism: "Almost every unseen Paper 1 text contains a central structural pivot (a 'volta'). In satirical op-eds, the volta occurs when the writer drops the ironic comedic mask in the final paragraphs to speak with earnest gravity. In charity appeals and speeches, the volta occurs when the text shifts from diagnosing a terrifying crisis (fear/guilt pathos) to offering an empowering solution (hope/agency). Identifying this pivot is essential for scoring 5/5 in Criterion C (Focus and Organization).",
+                genreExamples: [
+                    { genre: "Satirical Op-Ed (Clara Vance)", quote: "Shifting in Paragraph 5 from mocking 'gratitude sprints' to asking earnestly: 'When did we become so terrified of an unmeasured hour?'", analysis: "Drops the mock-celebratory persona to reveal the genuine philosophical grief beneath the satire, preventing the reader from laughing off the message." },
+                    { genre: "Graphic Memoir (Julian Cho)", quote: "The sudden blackout between Panel 4 (cramped cyan-lit grid) and Panel 6 (warm amber borderless bleed panel).", analysis: "Executes a visual and chromatic volta where technological failure triggers human connection." },
+                    { genre: "Charity Print Ad", quote: "Moving from 'Every minute, 27 soccer fields are razed' (bleak logos) to 'Protect our shared breath. Scan to fund guardians today' (empowering agency).", analysis: "Pivots from crisis to solution so the reader's eco-anxiety is channeled into immediate donation rather than paralysis." }
+                ],
+                level7Model: "Structurally, Vance executes a poignant tonal volta in the penultimate paragraph, shedding her ironic corporate persona to ask in earnest vulnerability, 'When did we become so terrified of an unmeasured hour?'",
+                pitfall: "Treating a text as having one static tone from start to finish. Always track how the tone evolves from the opening hook through the structural pivot to the conclusion.",
+                related: ["Cyclical / Bookended Structure", "Rhetorical Question", "Panel Size, Borders & Bleed"]
             },
             {
                 term: "Cyclical / Bookended Structure",
                 cat: "Syntactic & Structural",
-                def: "Ending a text by returning to the exact image, anecdote, or metaphor introduced in the opening hook.",
+                def: "A macro-structural framework in which the conclusion of a text returns to the exact image, anecdote, or motif introduced in the opening hook.",
                 ex: "Opening an essay with a ticking alarm clock and concluding with the reader hitting 'snooze' on climate action.",
-                effect: "Creates aesthetic closure and structural resonance, demonstrating how the opening motif has acquired deeper significance through the argument."
+                effect: "Creates aesthetic closure and structural resonance, demonstrating how the opening motif has acquired deeper ideological significance through the argument.",
+                mechanism: "When a writer opens with a concrete anecdotal hook or visual motif and circles back to it in the final sentence, the reader experiences a satisfying sense of structural completion. However, in strong persuasive texts, the return is never identical: the opening image is transformed or reframed by the argument that intervened, leaving the reader with a lingering resonance.",
+                genreExamples: [
+                    { genre: "Personal Essay / Column", quote: "Opening with the author staring at a glowing blue smartphone at 3:14 a.m., and ending with the author placing the phone outside the bedroom door to look at the moon.", analysis: "Bookends the nocturnal setting to dramatize the author's journey from digital captivity to reclaimed stillness." },
+                    { genre: "Advocacy Speech", quote: "Opening with the image of a grandmother's flooded taro patch in Tuvalu and concluding: 'When you sign this treaty, you decide whether my grandmother harvests taro or salt.'", analysis: "Returns to the opening indigenous motif to ground abstract international treaty voting in a single human fate." },
+                    { genre: "Print Ad Layout", quote: "Top headline: 'Take a Deep Breath.' Bottom call-to-action beside the rainforest lung logo: 'Now help the Earth take hers.'", analysis: "Visually and linguistically bookends the Z-pattern reading path around a single physical breath." }
+                ],
+                level7Model: "By employing a cyclical bookended structure that returns in the final line to the opening motif of her grandmother's taro patch, Tui transforms a personal family anecdote into the moral litmus test of the entire Geneva summit.",
+                pitfall: "Saying 'it repeats the beginning to make it memorable.' Explain how the meaning of the motif has deepened or shifted between the introduction and the conclusion.",
+                related: ["In Media Res / Anecdotal Hook", "Shift / Volta (Tonal Pivot)", "Extended Metaphor (Conceit)"]
             },
             {
                 term: "In Media Res / Anecdotal Hook",
                 cat: "Syntactic & Structural",
-                def: "Opening a non-literary text in the middle of a vivid personal story or immediate sensory scene before introducing the thesis.",
+                def: "Opening a non-literary text in the middle of a vivid personal story, immediate sensory scene, or micro-case study before introducing the broader thesis.",
                 ex: "\"At 3:14 a.m., the blue glare of my smartphone illuminated a bedroom ceiling I hadn't truly looked at in months.\"",
-                effect: "Humanizes an abstract issue immediately, drawing the reader into a relatable lived moment before expanding from the personal to the political."
+                effect: "Humanizes an abstract issue immediately, drawing the reader into a relatable lived moment before expanding inductively from the personal to the political.",
+                mechanism: "If a writer begins an article with a dry macroeconomic thesis ('Smartphone addiction is rising by 14% globally'), readers quickly lose interest. By opening *in media res* (in the midst of things) with a sensory micro-narrative, the writer hooks the reader's curiosity and builds lived-experience ethos or empathetic identification. Once the reader is emotionally invested in the micro-scene, the writer zooms out inductively to the macro-societal argument.",
+                genreExamples: [
+                    { genre: "Feature Journalism", quote: "\"At 5:40 a.m., before the smog lifts over Dhaka, sixteen-year-old Nadia threads her first needle under a flickering fluorescent tube.\"", analysis: "Drops the reader into a cinematic sensory scene to humanize global fast-fashion supply chains before introducing trade statistics." },
+                    { genre: "Lifestyle / Tech Blog", quote: "\"Last Tuesday, I caught myself checking my smartwatch to see if I had enjoyed my walk in the park.\"", analysis: "Uses a self-deprecating personal anecdote to disarm the reader and build relatable rapport before critiquing biometric tracking." },
+                    { genre: "Keynote Speech", quote: "\"Three days ago, I packed my suitcase while ankle-deep in king-tide seawater inside my living room.\"", analysis: "Uses an immediate narrative hook to shock the insulated conference audience out of bureaucratic routine." }
+                ],
+                level7Model: "Opening *in media res* with a self-deprecating personal anecdote, the blogger disarms the reader's defensiveness, using inductive structure to expand from a relatable domestic habit to a broader critique of surveillance capitalism.",
+                pitfall: "Summarizing the opening story without explaining its structural function: moving inductively from a concrete micro-human moment to an abstract macro-thesis.",
+                related: ["Cyclical / Bookended Structure", "Ethos (Credibility)", "Pathos (Emotion)"]
             },
             {
                 term: "Subheadings & Section Breaks",
                 cat: "Syntactic & Structural",
-                def: "Typographical dividers that segment an article, webpage, or brochure into digestible thematic modules.",
+                def: "Typographical dividers that segment an article, webpage, report, or brochure into digestible thematic modules.",
                 ex: "Bold subheadings reading \"1. The Myth of Recycling\" and \"2. Follow the Plastic Trail.\"",
-                effect: "Accommodates the scanning habits of digital readers while explicitly signposting the logical progression of the writer's argument."
+                effect: "Accommodates the scanning habits of busy or digital readers while explicitly signposting the logical progression of the writer's argument.",
+                mechanism: "In digital journalism, web features, and informational brochures, readers rarely read linearly from word one to the end; they scan in an F-pattern. Subheadings act as both structural signposts and persuasive micro-headlines. Analyze not just the organizational clarity they provide, but the tone and typography of the subheadings themselves (e.g., imperative subheadings vs. ironic question subheadings).",
+                genreExamples: [
+                    { genre: "Eco-Travel Webpage", quote: "Serif subheadings dividing the scroll: \"The Myth of the Quick Getaway\" → \"The Luxury of Watching the World Unfold\" → \"How to Board.\"", analysis: "Signposts the persuasive arc from critiquing aviation to romanticizing rail travel and finally offering practical logistics." },
+                    { genre: "Investigative Report", quote: "Bold, numbered subheadings: \"Myth #1: Bioplastics Degrade in Oceans\" followed by \"The Reality:\"", analysis: "Creates a forensic, myth-busting binary structure that projects authoritative objectivity." },
+                    { genre: "Health / Fitness Guide", quote: "Imperative subheadings: \"Ditch the Late-Night Scroll,\" \"Anchor Your Circadian Rhythm,\" \"Audit Your Caffeine.\"", analysis: "Uses punchy verb-first subheadings so even a skimming reader absorbs the core actionable steps." }
+                ],
+                level7Model: "To accommodate the F-pattern scanning habits of digital readers, the webpage deploys contrasting serif subheadings that structurally signpost the transition from airport disillusionment ('The Myth of the Quick Getaway') to rail serenity.",
+                pitfall: "Writing 'subheadings make the text easier to read and organized.' That is a Level 4 comment. Always analyze the DICTION of the subheadings and how they guide the ideological progression.",
+                related: ["Pull Quotes & Callout Boxes", "Bullet Points & Numbered Lists", "Typography & Font Weight"]
             },
             {
                 term: "Pull Quotes & Callout Boxes",
                 cat: "Syntactic & Structural",
-                def: "Brief, provocative excerpts lifted from the main body text and set in large display type within the page layout.",
+                def: "Brief, provocative excerpts lifted from the main body text—or standalone statistical boxes—set in large display type within the page layout.",
                 ex: "A bordered sidebar box highlighting: \"91% of global packaging is never recycled once.\"",
-                effect: "Acts as a visual entry point for skimming readers, elevating the most alarming or thesis-defining claim to high visual salience."
+                effect: "Acts as a visual entry point for skimming readers, elevating the most alarming or thesis-defining claim to high visual salience.",
+                mechanism: "In magazine spreads, online broadsheets, and multimodal features, pull quotes and bordered callout sidebars disrupt columns of dense grey prose. They serve two functions: (1) Visual Salience—drawing the eye of a casual page-flipper into the article via a provocative statement, and (2) Ideological Amplification—reinforcing the single takeaway the editor most wants the audience to remember.",
+                genreExamples: [
+                    { genre: "Multimodal Travel Webpage", quote: "A bordered sidebar box titled 'The True Cost of Getting There' comparing CO2 and 'Pages of Novel Read' between plane and train.", analysis: "Isolates comparative logos and lifestyle metrics in a high-salience box so skimming readers grasp the core value proposition immediately." },
+                    { genre: "Magazine Profile / Interview", quote: "A large italic pull quote interrupting the text columns: \"'We didn't build a social network; we built a behavioral modification engine.'\"", analysis: "Elevates the whistleblower's most damning confession to primary visual hierarchy, hooking the browsing reader." },
+                    { genre: "NGO Annual Report", quote: "A highlighted yellow callout box: \"$1 = 4 Liters of Clean Water Delivered.\"", analysis: "Separates the concrete financial impact ratio from dense narrative text to reassure prospective donors." }
+                ],
+                level7Model: "By isolating the whistleblower's confession inside a high-salience pull quote framed by generous white space, the magazine editor creates a dual entry point that hooks skimming readers with the article's central indictment.",
+                pitfall: "Ignoring sidebars, callout boxes, and pull quotes because they sit outside the main paragraphs. In Paper 1, every element on the page is deliberate!",
+                related: ["Salience", "Logos (Logic & Evidence)", "Subheadings & Section Breaks"]
             },
             {
                 term: "Bullet Points & Numbered Lists",
                 cat: "Syntactic & Structural",
-                def: "Formatting information into vertical itemized points rather than continuous prose.",
+                def: "Formatting complex information or instructions into vertical itemized points rather than continuous narrative prose.",
                 ex: "A charity pamphlet listing four concrete ways a $20 donation is allocated.",
-                effect: "Projects transparency, clinical efficiency, and actionable clarity—lowering the cognitive friction required for the reader to act."
+                effect: "Projects transparency, clinical efficiency, and actionable clarity—lowering the cognitive friction required for the reader to act.",
+                mechanism: "Dense paragraphs require sustained cognitive effort. When a text shifts from continuous prose into a bulleted or numbered list, it signals practical utility, scientific digestibility, and unvarnished transparency. In public health posters or charity appeals, itemized lists break an overwhelming global crisis down into manageable, bite-sized steps, empowering the reader with a clear checklist for agency.",
+                genreExamples: [
+                    { genre: "Public Health Poster", quote: "Three bold bullet points with check-mark icons: \"• Wash for 20 seconds • Ventilate indoor spaces • Stay home when feverish.\"", analysis: "Eliminates medical jargon in favor of parallel imperative bullets, ensuring rapid comprehension during a public emergency." },
+                    { genre: "Charity Appeal Sidebar", quote: "A numbered breakdown: \"1. 78% Direct Field Conservation | 2. 14% Indigenous Legal Defense | 3. 8% Administration.\"", analysis: "Uses an itemized list to project financial transparency and build institutional ethos with skeptical donors." },
+                    { genre: "Satirical Column", quote: "A mock-bulleted list of 'Corporate Wellness Perks': \"• Free mindfulness app (to cope with unpaid overtime) • Pizza Friday (in lieu of dental coverage).\"", analysis: "Subverts the corporate bullet-point convention through parenthetical irony." }
+                ],
+                level7Model: "Transitioning from narrative pathos to a bulleted financial breakdown in the sidebar, the charity pamphlet lowers cognitive friction and projects fiscal transparency, assuring hesitant donors that their contribution yields measurable impact.",
+                pitfall: "Saying 'bullet points make the information quick to read' without connecting that efficiency to the specific audience's needs (e.g., busy commuters or skeptical donors).",
+                related: ["Subheadings & Section Breaks", "Logos (Logic & Evidence)", "Parataxis (Short/Truncated Syntax)"]
             },
             {
                 term: "Hyperlinks & Interactive UI Elements",
                 cat: "Syntactic & Structural",
-                def: "Conventions specific to digital texts—such as underlined anchor links, CTA buttons, search bars, and share icons.",
+                def: "Structural conventions specific to digital and web texts—such as underlined hyperlinks, CTA buttons, QR codes, search bars, and share icons.",
                 ex: "A bright green button reading \"Calculate Your Footprint →\" at the bottom of a blog post.",
-                effect: "Transforms the audience from passive consumers of print into active digital participants, collapsing the delay between persuasion and action."
+                effect: "Transforms the audience from passive consumers of print into active digital participants, collapsing the delay between persuasion and action.",
+                mechanism: "When the IB gives you a webpage, blog post, social media thread, or print ad with a QR code, examiners expect you to analyze its digital medium conventions. Hyperlinks anchored to citations ('according to a 2024 Lancet study') build instant verification ethos; interactive Call-to-Action (CTA) buttons and QR codes remove behavioral friction, allowing the reader to act on their emotional conviction with a single tap.",
+                genreExamples: [
+                    { genre: "Eco-Travel Webpage", quote: "A rounded forest-green UI button at the bottom of the article: \"Pledge a Flight-Free Summer → Receive Our Nordic Rail Guide.\"", analysis: "Combines an ethical commitment ('Pledge') with an immediate digital reward ('Receive Guide'), converting passive reading into active participation." },
+                    { genre: "Print Charity Appeal", quote: "A high-contrast QR code in the lower-right corner beside: \"Scan to fund indigenous forest guardians today.\"", analysis: "Bridges print media and smartphone convenience, allowing the commuter to resolve their moral guilt within seconds." },
+                    { genre: "Online Journalism", quote: "Underlined blue hyperlinks embedded on phrases like 'leaked internal audit' and 'peer-reviewed emissions data'.", analysis: "Provides transparent verification pathways that bolster the journalist's investigative ethos." }
+                ],
+                level7Model: "Anchored at the terminus of the Z-pattern reading path, the forest-green UI button ('Pledge a Flight-Free Summer →') exploits the interactive affordances of the digital medium, collapsing the temporal gap between emotional persuasion and behavioral commitment.",
+                pitfall: "Analyzing a webpage as if it were a printed newspaper article and completely ignoring navigation bars, hyperlinks, comment counters, and CTA buttons.",
+                related: ["Vectors & Leading Lines", "Kairos (Urgency / Timeliness)", "Salience"]
             },
 
             // VISUAL & GRAPHIC (14)
             {
                 term: "Salience",
                 cat: "Visual & Graphic",
-                def: "The degree to which a visual element stands out and commands the viewer's initial attention through size, color contrast, focus, or placement.",
+                def: "In Kress and van Leeuwen's visual grammar, the degree to which a visual element stands out and commands the viewer's initial attention through size, color contrast, focus, or placement.",
                 ex: "A neon-red plastic bottle floating in the center of a desaturated grey ocean.",
-                effect: "Establishes the visual hierarchy of the text, dictating the exact entry point of the viewer's cognitive processing."
+                effect: "Establishes the visual hierarchy of the text, dictating the exact entry point of the viewer's cognitive and emotional processing.",
+                mechanism: "When a viewer looks at a multimodal text (poster, ad, magazine cover, comic, webpage), they do not read from top-left to bottom-right like prose; their eye is pulled involuntarily to the element of highest visual salience. Designers engineer salience through scale (oversized central image), chromatic contrast (bright warm color against a muted background), sharpness of focus (depth of field), or human/animal eyes. Always begin your visual analysis by identifying the primary point of salience and explaining how it hooks the audience.",
+                genreExamples: [
+                    { genre: "WWF Charity Print Ad", quote: "An aerial photograph of the bright green Amazon canopy sculpted into the center-stage silhouette of human lungs, with a grey-brown necrotic cavity in the lower lobe.", analysis: "Commands immediate primary salience through anatomical recognition and stark chromatic contrast between lush green and dead ash." },
+                    { genre: "Graphic Strip (Panel 1–4)", quote: "Glowing, high-saturation cyan smartphone rectangles illuminating commuters' faces inside a black-and-white ink subway car.", analysis: "Uses spot-color contrast to give the screens primary visual salience, showing how digital devices dominate the characters' reality." },
+                    { genre: "Public Health Warning", quote: "An oversized, stencil-cut red word 'STOP' occupying 40% of the upper canvas against a stark white background.", analysis: "Uses typographic scale and alarm-red hue to arrest the pedestrian's peripheral vision instantly." }
+                ],
+                level7Model: "Commanding immediate visual salience at the center of the composition is the anatomical silhouette of the rainforest lungs, whose vivid emerald canopy contrasts starkly against the necrotic grey ash of the clear-cut lower lobe.",
+                pitfall: "Saying 'the picture is big and eye-catching so people look at it.' Use the exact term 'visual salience' and specify the mechanism (chromatic contrast, scale, central placement) that creates it.",
+                related: ["Vectors & Leading Lines", "Rule of Thirds & Center-Stage", "Color Palette & Saturation"]
             },
             {
                 term: "Vectors & Leading Lines",
                 cat: "Visual & Graphic",
-                def: "Visible or implied directional lines (created by pointing fingers, gazes, roads, or layout angles) that guide the viewer's eye across the composition.",
+                def: "Visible or implied directional lines within an image (created by pointing arms, eye gazes, roads, architectural lines, or layout angles) that guide the viewer's eye across the composition.",
                 ex: "A subject's outstretched arm pointing diagonally down toward the charity's donation URL.",
-                effect: "Choreographs the viewer's reading path (often in a Z-pattern or F-pattern), ensuring the eye lands inevitably on the persuasive call-to-action."
+                effect: "Choreographs the viewer's reading path (often in a Z-pattern), ensuring the eye travels inevitably from the emotional hook to the persuasive call-to-action.",
+                mechanism: "After the viewer's eye lands on the primary point of salience, the designer must guide their gaze toward the written copy and brand logo. Vectors act as invisible highways across the page. A subject's 'offer gaze' looking toward a product creates an eyeline vector; a diagonal bulldozer track or train window frame creates a geometric leading line. In Western print layouts, vectors often reinforce a 'Z-pattern' reading path terminating at the bottom-right anchor zone.",
+                genreExamples: [
+                    { genre: "WWF Deforestation Ad", quote: "The diagonal scar of felled trees and bulldozer tracks cutting downward from the center lung lobe toward the bottom-right QR code and WWF logo.", analysis: "Creates a destructive diagonal vector that pulls the viewer's eye from the visual crisis directly into the financial solution." },
+                    { genre: "Eco-Travel Webpage Header", quote: "The wooden window frame and perspective lines of the train carriage converging toward the misty fjord outside.", analysis: "Uses linear perspective vectors to draw the viewer's gaze past the coffee mug into the tranquil Norwegian landscape." },
+                    { genre: "Political Campaign Poster", quote: "A leader standing in three-quarter profile, gazing upward and rightward toward the slogan 'Build Tomorrow.'", analysis: "Uses an eyeline vector to connect the candidate's optimistic gaze directly with the typographic promise." }
+                ],
+                level7Model: "Following the diagonal vector carved by the yellow bulldozers downward into the lower-right anchor zone, the viewer's gaze is choreographed along a Z-pattern directly from the ecological wound to the scannable QR code.",
+                pitfall: "Analyzing the image and the bottom corner logo as completely disconnected objects without tracing the visual vector or reading path that links them.",
+                related: ["Salience", "Gaze: Demand vs. Offer", "Rule of Thirds & Center-Stage"]
             },
             {
                 term: "Gaze: Demand vs. Offer",
                 cat: "Visual & Graphic",
-                def: "In Kress and van Leeuwen's visual grammar, whether a depicted figure looks directly at the viewer (Demand) or away from the camera (Offer).",
+                def: "In Kress and van Leeuwen's visual grammar, whether a depicted human or animal figure looks directly out at the viewer ('Demand') or looks away from the camera ('Offer').",
                 ex: "A refugee child looking straight into the camera lens (Demand) vs. looking across a fenced border (Offer).",
-                effect: "A Demand gaze establishes symbolic eye contact that demands moral recognition; an Offer gaze invites detached, voyeuristic contemplation."
+                effect: "A Demand gaze establishes symbolic eye contact that demands moral recognition; an Offer gaze invites detached contemplation or empathy with the subject's perspective.",
+                mechanism: "Eye contact is a powerful psychological trigger. In a 'Demand Gaze', the subject breaks the fourth wall and stares directly into the viewer's eyes, demanding an interpersonal relationship—whether that is guilt and accountability (in charity ads), intimidation (in authority portraits), or seductive invitation (in luxury ads). In an 'Offer Gaze', the subject does not look at the camera; instead, the viewer is positioned as an invisible observer contemplating the subject's plight or following their gaze.",
+                genreExamples: [
+                    { genre: "Wildlife Charity Appeal", quote: "An extreme close-up of a Sumatran tiger whose amber eyes stare directly through the lens at the reader.", analysis: "Deploys a piercing Demand Gaze that breaks the fourth wall, stripping the affluent reader of comfortable detachment and demanding moral accountability." },
+                    { genre: "Graphic Strip (Panels 1–4)", quote: "Every subway commuter looking downward into their glowing palms rather than at the viewer or each other.", analysis: "Uses collective downward Offer Gazes to turn the commuters into objects of sociological contemplation, illustrating their self-absorption." },
+                    { genre: "Luxury Travel Ad", quote: "A lone traveler seen from behind (Offer) looking out over an alpine ridge.", analysis: "Avoids eye contact so the viewer can project themselves into the traveler's shoes without feeling confronted." }
+                ],
+                level7Model: "Crucially, the tiger's piercing 'demand' gaze breaks the fourth wall; by locking symbolic eye contact with the magazine reader, the composition transforms passive aesthetic viewing into an inescapable moral confrontation.",
+                pitfall: "Just writing 'the person is looking at the camera.' Using Kress and van Leeuwen's exact terms 'Demand gaze' and 'Offer gaze' is a hallmark of a Level 7 Paper 1 script.",
+                related: ["Camera Angle (Low, High, Eye-Level)", "Synthetic Personalization", "Pathos (Emotion)"]
             },
             {
                 term: "Camera Angle (Low, High, Eye-Level)",
                 cat: "Visual & Graphic",
-                def: "The vertical positioning of the lens relative to the subject.",
+                def: "The vertical positioning of the camera lens or illustrator's perspective relative to the depicted subject.",
                 ex: "Shooting a fast-food burger from a low angle to make it tower heroically, or shooting a littered beach from a high drone angle.",
-                effect: "Manipulates power dynamics: low angles monumentalize and empower, high angles diminish and expose vulnerability, eye-level fosters equality."
+                effect: "Manipulates power dynamics: low angles monumentalize and empower, high angles diminish and expose vulnerability, eye-level fosters democratic equality.",
+                mechanism: "Vertical angle encodes social power. A 'High Angle' forces the viewer to look down upon the subject, rendering a child, animal, or commuter diminutive, trapped, or vulnerable (or granting an omniscient bird's-eye overview of an ecosystem). A 'Low Angle' places the camera near the ground looking up, making an athlete, politician, or product tower with heroic dominance or menace. An 'Eye-Level Angle' places subject and viewer on an equal horizontal plane, fostering empathy and sincerity.",
+                genreExamples: [
+                    { genre: "Graphic Strip (Panel 1–4 vs. Panel 6)", quote: "Shifting from a cramped high-angle view looking down on hunched commuters in Panels 1–4 to a warm eye-level angle as two strangers smile in Panel 6.", analysis: "Tracks the shift from oppressive institutional submission (high angle) to egalitarian human parity (eye-level)." },
+                    { genre: "Charity Appeal", quote: "Photographing a displaced child from a slightly elevated adult standing height looking down.", analysis: "Uses a high angle to accentuate the child's physical fragility and trigger protective parental instincts in the adult viewer." },
+                    { genre: "Sportswear Commercial Ad", quote: "Shooting a paralympic sprinter on the starting blocks from ground level looking up against the stadium lights.", analysis: "Uses a dramatic low angle to monumentalize the athlete's resilience and heroic stature." }
+                ],
+                level7Model: "By abandoning the oppressive high-angle perspective of the opening grid in favor of an egalitarian eye-level angle in the final splash panel, Cho visually restores dignity and democratic connection to the commuters.",
+                pitfall: "Identifying the camera angle without connecting it to the power relationship between the viewer and the depicted subject.",
+                related: ["Gaze: Demand vs. Offer", "Salience", "Rule of Thirds & Center-Stage"]
             },
             {
                 term: "Rule of Thirds & Center-Stage",
                 cat: "Visual & Graphic",
-                def: "Compositional frameworks placing subjects either along a 3x3 grid intersection (Rule of Thirds) or dead-center (Center-Stage).",
+                def: "Compositional frameworks that position key visual elements either along the intersections of a 3x3 grid (Rule of Thirds) or dead-center in the frame (Center-Stage).",
                 ex: "Positioning a lone hiker on the bottom-left grid intersection against a vast mountain range.",
-                effect: "Center-stage asserts inescapable dominance; off-center placement along the thirds emphasizes the environment's scale or dynamic movement."
+                effect: "Center-stage asserts inescapable dominance; off-center placement along the thirds emphasizes environmental scale or dynamic movement.",
+                mechanism: "Where a subject sits inside the rectangular frame dictates how it interacts with its surroundings. Placing a subject 'Center-Stage' (dead-center) grants it maximum compositional authority, symmetry, and permanence—everything else revolves around it. Conversely, placing a subject off-center at one of the four 'Rule of Thirds' grid intersections creates dynamic visual tension and allows 66% of the frame to showcase the encroaching environment or vast wilderness.",
+                genreExamples: [
+                    { genre: "WWF Deforestation Ad", quote: "Placing the rainforest lung silhouette dead-center (Center-Stage), while positioning the clear-cut bulldozer cavity precisely on the lower-right rule-of-thirds intersection.", analysis: "Establishes the lung's central importance while creating an asymmetrical focal disruption at the lower-right intersection." },
+                    { genre: "Eco-Travel Webpage Header", quote: "Positioning the steaming ceramic coffee mug on the lower-left rule-of-thirds intersection, leaving two-thirds of the window open to the misty fjord.", analysis: "Uses asymmetrical framing to balance cozy foreground intimacy with expansive natural grandeur." },
+                    { genre: "Minimalist Tech Print Ad", quote: "Placing a single wireless earbud dead-center inside a pure white square.", analysis: "Uses center-stage symmetry to elevate a tiny piece of electronics into an iconic object of design." }
+                ],
+                level7Model: "While the verdant canopy occupies center-stage to assert its biological primacy, the designer positions the grey clear-cut scar along the lower-right rule-of-thirds intersection, generating compositional asymmetry that destabilizes the viewer.",
+                pitfall: "Describing where things are using vague words ('on the side', 'in the middle') instead of compositional metalanguage ('center-stage focal point', 'lower-right quadrant', 'rule-of-thirds intersection').",
+                related: ["Salience", "Negative / White Space", "Vectors & Leading Lines"]
             },
             {
                 term: "Chiaroscuro & Lighting",
                 cat: "Visual & Graphic",
-                def: "The dramatic interplay of harsh light and deep shadow across a visual composition.",
+                def: "The dramatic interplay of harsh light and deep shadow across a visual composition (chiaroscuro), contrasted with bright, even high-key lighting.",
                 ex: "A side-lit portrait where half the speaker's face is submerged in darkness.",
-                effect: "Evokes gravity, secrecy, moral ambiguity, or existential threat, contrasting with high-key studio lighting which suggests optimism and transparency."
+                effect: "Chiaroscuro evokes gravity, secrecy, moral duality, or existential threat; high-key lighting projects optimism, clinical transparency, and warmth.",
+                mechanism: "Borrowed from Renaissance painting and film noir, 'chiaroscuro' (Italian for light-dark) uses extreme tonal contrast between illuminated highlights and pitch-black shadows. In charity posters, cyber-security warnings, and graphic novels, heavy shadow submerges backgrounds to isolate the subject in vulnerability or danger. Conversely, soft golden-hour or bright high-key daylight eliminates shadows to signal safety, honesty, and ecological harmony.",
+                genreExamples: [
+                    { genre: "Wildlife Charity Poster", quote: "Spot-lighting the tiger's amber eyes and whiskers while submerging the surrounding rainforest into pitch-black shadow.", analysis: "Uses chiaroscuro lighting to visually metaphor the encroaching darkness of extinction swallowing the animal's habitat." },
+                    { genre: "Graphic Memoir (Panels 1–4)", quote: "Harsh cyan smartphone light casting stark upward shadows across the commuters' hollow eyes inside a dark subway car.", analysis: "Creates an eerie, alienating chiaroscuro effect that portrays digital glow as unnatural and isolating." },
+                    { genre: "Solar Energy Webpage", quote: "High-key, sun-drenched photography of a family home with zero harsh shadows.", analysis: "Uses bright, even illumination to associate renewable energy with transparency and effortless optimism." }
+                ],
+                level7Model: "Framed in stark chiaroscuro lighting, the tiger's illuminated face emerges from a pitch-black void, visually symbolizing how habitat loss is literally eclipsing the species' existence.",
+                pitfall: "Saying 'the background is dark to make it look sad.' Use 'chiaroscuro' or 'low-key lighting' and connect the darkness to a specific thematic threat (e.g., extinction, secrecy, alienation).",
+                related: ["Color Palette & Saturation", "Negative / White Space", "Salience"]
             },
             {
                 term: "Negative / White Space",
                 cat: "Visual & Graphic",
-                def: "Areas of a page or image intentionally left unpopulated by text or graphics.",
+                def: "Areas of a page, screen, or visual canvas intentionally left unpopulated by text, figures, or graphic clutter.",
                 ex: "A tiny smartphone icon surrounded by an expanse of blank white canvas.",
-                effect: "Prevents visual clutter, projects upscale sophistication, or visually metaphors isolation, silence, and insignificance."
+                effect: "Prevents visual clutter, projects upscale sophistication, slows reading velocity, or visually metaphors isolation and silence.",
+                mechanism: "What a designer leaves OUT of a frame is just as expressive as what they put in. Negative space (or 'white space' in page layout) operates in three distinct ways depending on context: (1) In luxury ads and slow-living webpages, generous white space projects unhurried calm and refinement; (2) In charity posters, vast empty space surrounding a small figure emphasizes loneliness and abandonment; (3) In comics, sudden negative space after crowded panels creates auditory silence.",
+                genreExamples: [
+                    { genre: "Eco-Travel Webpage", quote: "Wide off-white margins surrounding the text columns and minimalist header.", analysis: "Deploys generous negative space to slow the reader's eye velocity, counteracting the frantic clutter of commercial booking sites." },
+                    { genre: "Graphic Strip (Panel 5)", quote: "The sudden disappearance of all jagged notification bubbles at the top of Panel 5 during the blackout, leaving blank space above the commuters.", analysis: "Uses negative space to make the sudden digital silence visually palpable, allowing the reader to exhale." },
+                    { genre: "Mental Health Poster", quote: "A tiny silhouette of a teenager sitting at the bottom edge of a vast, empty grey canvas.", analysis: "Uses overwhelming negative space to visually dwarf the subject and externalize the feeling of depressive isolation." }
+                ],
+                level7Model: "In stark contrast to commercial travel portals cluttered with flashing banners, the webpage employs expansive margins of negative white space, slowing the user's ocular pacing to embody the restorative stillness of rail travel.",
+                pitfall: "Thinking blank space means the designer 'ran out of things to put there.' Always interpret negative space as a deliberate compositional choice.",
+                related: ["Rule of Thirds & Center-Stage", "The Gutter & Closure", "Chiaroscuro & Lighting"]
             },
             {
                 term: "Anchorage vs. Relay (Barthes)",
                 cat: "Visual & Graphic",
-                def: "How written text interacts with images: either fixing/pinning down the ambiguous meaning of an image (Anchorage) or advancing a shared narrative (Relay).",
+                def: "Roland Barthes' framework for image-text interplay: written copy either pins down one specific meaning of an ambiguous image ('Anchorage') or works alongside the image to advance a sequence ('Relay').",
                 ex: "An image of a pristine beach anchored by the ironic caption: \"Now 30% microplastic by weight.\"",
-                effect: "Crucial for Criterion B in multimodal texts: shows how copy subverts or clarifies the visual promise to deliver a persuasive shock."
+                effect: "Crucial for Criterion B in multimodal texts: demonstrates how written copy subverts, clarifies, or advances the visual promise.",
+                mechanism: "French semiotician Roland Barthes observed that every photograph is naturally 'polysemous'—it contains a floating chain of possible meanings. Without text, an aerial photo of a lung-shaped forest could simply be admired as clever digital art. Written copy provides 'Anchorage' by clamping down on the image and directing the viewer toward the exact ideological interpretation intended ('WHEN THEY RUN OUT OF AIR, SO DO YOU'). Conversely, 'Relay' occurs in comics and infographics where text and image contribute distinct, complementary pieces of information to move an argument forward.",
+                genreExamples: [
+                    { genre: "WWF Deforestation Ad (Anchorage)", quote: "The aerial photo of the clear-cut rainforest lung anchored by the bold headline: \"WHEN THEY RUN OUT OF AIR, SO DO YOU.\"", analysis: "Fixes the meaning of the visual metaphor, preventing aesthetic detachment by anchoring the image in personal suffocation." },
+                    { genre: "Eco-Travel Webpage (Relay)", quote: "The prose narrative describing the fjord journey paired with the sidebar infographic comparing exact CO2 and cortisol metrics.", analysis: "Operates via Barthesian relay: the prose supplies sensory pathos while the graphic table supplies quantitative logos." },
+                    { genre: "Ironic Charity Ad (Subversive Anchorage)", quote: "A smiling family eating seafood anchored by the caption: \"Pass the mercury.\"", analysis: "Uses ironic anchorage to violently subvert the wholesome domestic image, shocking the viewer." }
+                ],
+                level7Model: "To prevent the viewer from merely admiring the graphic ingenuity of the lung composite, the headline deploys Roland Barthes' concept of anchorage—pinning down the polysemous image with uncompromising existential stakes.",
+                pitfall: "Analyzing the image in Paragraph 1 and the text in Paragraph 2 without ever explaining how they interact. Using Barthes' 'anchorage' and 'relay' guarantees you analyze multimodal synergy!",
+                related: ["Salience", "Typography & Font Weight", "Juxtaposition"]
             },
             {
                 term: "Typography & Font Weight",
                 cat: "Visual & Graphic",
-                def: "The visual styling of text—including serif vs. sans-serif typefaces, kerning, capitalization, italics, and distressed textures.",
+                def: "The visual styling of written text—including serif vs. sans-serif typefaces, font weight (bold/light), capitalization, italics, kerning, and distressed textures.",
                 ex: "A stencil-cut, distressed all-caps headline in a public health warning poster.",
-                effect: "Functions as visual tone of voice: heavy sans-serif screams urgent authority, delicate serif whispers heritage, handwritten script conveys intimacy."
+                effect: "Functions as visual tone of voice: heavy all-caps sans-serif screams urgent authority, delicate serif whispers heritage, handwritten script conveys intimacy.",
+                mechanism: "Before a reader even processes the semantic meaning of a headline, they register its visual typography as vocal inflection. Heavy, condensed, all-caps sans-serif fonts project modern, blunt institutional command or alarm. Traditional serif typefaces (with small decorative strokes at the ends of letters) project literary gravitas, academic heritage, or unhurried elegance. Handwritten or brush-script fonts simulate personal, artisanal authenticity.",
+                genreExamples: [
+                    { genre: "WWF Deforestation Ad", quote: "Bold, condensed, all-caps white sans-serif copy ('WHEN THEY RUN OUT OF AIR, SO DO YOU') stamped directly across the scarred lung boundary.", analysis: "Projects modern, clinical urgency without decorative distraction, acting as a visual barrier across the image." },
+                    { genre: "Eco-Travel Webpage", quote: "Elegant, wide-tracked serif subheadings ('The Luxury of Watching the World Unfold') set in deep forest green.", analysis: "Evokes literary tradition and unhurried contemplation, reinforcing the 'slow travel' ethos." },
+                    { genre: "Graphic Strip (Notification Bubbles)", quote: "Cramped, jagged all-caps sans-serif lettering inside overlapping notification balloons ('URGENT: REPLY NOW').", analysis: "Visually translates the auditory shrillness and mechanical aggression of digital alerts." }
+                ],
+                level7Model: "Set in a heavy, condensed all-caps sans-serif typeface devoid of decorative serifs, the headline projects blunt institutional urgency, visually halting the eye's vertical descent across the canopy.",
+                pitfall: "Writing 'the headline is in bold font so you can read it easily.' Connect the specific typeface style (serif vs. sans-serif, all-caps, italics) to the emotional tone of voice.",
+                related: ["Salience", "Anchorage vs. Relay (Barthes)", "Subheadings & Section Breaks"]
             },
             {
                 term: "Panel Size, Borders & Bleed",
                 cat: "Visual & Graphic",
-                def: "In graphic narratives, the dimensions and framing of panels—ranging from cramped grids to full-page splash panels or images that run off the page edge (bleed).",
+                def: "In comic strips and graphic narratives, the dimensions, grid regularity, and framing of panels—ranging from cramped rectangular grids to borderless 'bleed' panels that run off the page edge.",
                 ex: "Five identical, claustrophobic square panels of office cubicles followed by a borderless bleed panel of a daydream.",
-                effect: "Controls temporal pacing and emotional confinement; rigid borders trap the protagonist, while bleeds release timeless emotional immersion."
+                effect: "Controls temporal pacing and emotional confinement; rigid borders trap the protagonist in routine, while borderless bleeds release timeless emotional immersion.",
+                mechanism: "In sequential art (Scott McCloud's framework), panel size and border lines represent time and psychological space. Small, uniform, tightly gridded panels with thick black borders compress space and chop time into mechanical, repetitive beats—ideal for depicting bureaucracy, alienation, or entrapment. Conversely, a wide splash panel or a 'bleed' (where the artwork dissolves the panel border and extends to the edge of the page) suspends time and creates boundless emotional release.",
+                genreExamples: [
+                    { genre: "Graphic Strip (Julian Cho, Panels 1–4)", quote: "Four identical, cramped square panels arranged in a rigid 2x2 grid with heavy black borders enclosing the subway commuters.", analysis: "Uses claustrophobic panel geometry to mirror both the physical train compartment and the regimented monotony of urban routine." },
+                    { genre: "Graphic Strip (Panel 6)", quote: "A panoramic, borderless splash/bleed panel spanning the entire bottom width of the page as two commuters smile in warm lantern light.", analysis: "Dissolves the black borders so the warm light bleeds off the page, visually signifying that genuine human empathy is expansive and uncontainable." },
+                    { genre: "Satirical Political Cartoon", quote: "A character's growing debt monster literally cracking and bursting through the top border of the panel.", analysis: "Breaks the formal frame to show a crisis outgrowing institutional containment." }
+                ],
+                level7Model: "By abandoning the cramped, thick-bordered 2x2 grid of Panels 1–4 in favor of a panoramic, borderless bleed panel in Panel 6, Cho visually liberates his characters from digital confinement into timeless human connection.",
+                pitfall: "Summarizing the plot of a comic strip panel by panel without analyzing the formal architecture of the panels themselves (size, grid symmetry, border thickness, bleeds).",
+                related: ["The Gutter & Closure", "Emanata & Iconography", "Speech & Thought Bubbles"]
             },
             {
                 term: "The Gutter & Closure",
                 cat: "Visual & Graphic",
-                def: "The blank space between comic panels where time passes and the reader mentally connects two static images into a continuous action (closure).",
+                def: "In graphic narratives, the blank space between panels ('the gutter') where time passes and the reader mentally connects two static images into a continuous reality ('closure').",
                 ex: "Panel 1 shows a raised axe; the gutter intervenes; Panel 2 shows a silent tree stump.",
-                effect: "Recruits the reader as an active co-creator of meaning; what occurs unseen in the gutter is often more psychologically potent than what is drawn."
+                effect: "Recruits the reader as an active co-creator of meaning; what occurs unseen in the gutter is often more psychologically potent than what is drawn.",
+                mechanism: "Comics theorist Scott McCloud defines 'closure' as the phenomenon of observing the parts but perceiving the whole. Between any two panels sits the 'gutter'—an empty white strip where action, time, or transformation occurs entirely inside the reader's imagination. Also look for McCloud's panel-to-panel transition types: Action-to-Action (fast physical progression), Subject-to-Subject, or Aspect-to-Aspect (where time stands still and the eye wanders across details of a mood/setting).",
+                genreExamples: [
+                    { genre: "Graphic Strip (Panels 1–4)", quote: "Moving across four panels of motionless commuters inside the same train car at the exact same moment.", analysis: "Uses McCloud's 'aspect-to-aspect' transitions across the gutters to freeze time and immerse the reader in a stagnant atmosphere of alienation." },
+                    { genre: "Graphic Strip (Between Panel 4 & 5)", quote: "A widened white gutter between Panel 4 (manic notifications) and Panel 5 (the tunnel blackout where screens go dead).", analysis: "Forces the reader to perform closure across the widened gutter, experiencing the abrupt shock of the power cut and sudden silence." },
+                    { genre: "Environmental Comic", quote: "Panel 1: A pristine 1970 coral reef; Gutter; Panel 2: The exact same reef bleached bone-white in 2025.", analysis: "Compresses fifty-five years of ecological negligence into a single millimeter of white gutter space, shocking the reader." }
+                ],
+                level7Model: "Across the widened white gutter separating Panel 4 from Panel 5, the reader performs cognitive closure—bridging the abrupt transition from manic digital noise to total blackout and experiencing the sudden silence alongside the commuters.",
+                pitfall: "Ignoring the transitions between panels. Using Scott McCloud's terms ('the gutter', 'closure', 'aspect-to-aspect transition') instantly marks you as an expert in graphic texts.",
+                related: ["Panel Size, Borders & Bleed", "Negative / White Space", "Shift / Volta (Tonal Pivot)"]
             },
             {
                 term: "Emanata & Iconography",
                 cat: "Visual & Graphic",
-                def: "Shorthand graphic symbols radiating from characters (plewds/sweat drops, motion lines, storm clouds) or culturally loaded visual icons.",
+                def: "Shorthand graphic symbols radiating from a character's head ('emanata'—such as sweat drops, jagged static lines, hearts, or motion blurs) and culturally loaded visual symbols ('iconography').",
                 ex: "Jagged static lines buzzing around a commuter's head as they stare at five overlapping notification icons.",
-                effect: "Externalizes invisible internal psychological states (anxiety, sensory overload, epiphany) into immediate visual shorthand."
+                effect: "Externalizes invisible internal psychological states (anxiety, sensory overload, epiphany) into immediate visual shorthand.",
+                mechanism: "Unlike prose writers who can describe internal thoughts over paragraphs, cartoonists and graphic designers must make invisible emotions visible at a glance. 'Emanata' (coined by cartoonist Mort Walker) are graphic lines radiating from a subject that externalize mental states like panic, dizziness, or fury. Similarly, 'Iconography' uses universally recognizable visual symbols (a melting hourglass, a Wi-Fi symbol turned into a cage, a sprouting green leaf) to compress complex themes into instant visual metaphors.",
+                genreExamples: [
+                    { genre: "Graphic Strip (Panels 1–4)", quote: "Short, jagged black static lines (emanata) vibrating around the bowed heads of the subway passengers.", analysis: "Externalizes the invisible nervous-system agitation and low-grade cortisol anxiety induced by constant smartphone notifications." },
+                    { genre: "Graphic Strip (Panel 6)", quote: "A tiny green botanical vine sprouting surrealistically from the cracked concrete floor between the two smiling commuters.", analysis: "Deploys hopeful ecological iconography to symbolize the organic rebirth of human empathy once screens are extinguished." },
+                    { genre: "Editorial Cartoon", quote: "Replacing the stars on a national flag with corporate barcode stripes.", analysis: "Subverts patriotic iconography to critique the commercialization of governance." }
+                ],
+                level7Model: "Radiating from the commuters' bowed temples, jagged black emanata externalize the invisible psychological toll of hyper-connectivity, making their internal sensory overload visually palpable.",
+                pitfall: "Calling emanata 'little lines around the head' instead of using the precise technical term 'emanata'.",
+                related: ["Speech & Thought Bubbles", "Panel Size, Borders & Bleed", "Metaphor"]
             },
             {
                 term: "Speech & Thought Bubbles",
                 cat: "Visual & Graphic",
-                def: "Containers for dialogue or internal monologue in comics; their tails, borders (jagged, wavy, tiny), and overlapping placement convey vocal tone.",
+                def: "Graphic containers for dialogue or internal monologue in comics; their size, border texture (jagged, wavy, smooth), font scale, and physical placement convey vocal tone and social dominance.",
                 ex: "Overlapping jagged speech bubbles crowding the top of a panel, pushing a character into the bottom corner.",
-                effect: "Makes auditory volume and social dominance visible; physical crowding by speech bubbles metaphors how a character is silenced by noise."
+                effect: "Makes auditory volume and psychological pressure visible; physical crowding by balloons metaphors how a character is silenced or overwhelmed by noise.",
+                mechanism: "In graphic texts, speech and notification bubbles are physical objects that occupy real estate inside the panel frame. A smooth oval bubble conveys normal conversation; a jagged 'scream' or 'electronic' balloon with sharp spikes conveys metallic, shrill, or aggressive volume; a tiny bubble with huge white space conveys a timid whisper. Crucially, examine how balloons interact spatially with characters: when huge balloons fill the upper 60% of a panel, they literally press down on the characters' heads.",
+                genreExamples: [
+                    { genre: "Graphic Strip (Panels 1–4)", quote: "Overlapping, jagged-bordered notification balloons ('BREAKING: CRISIS', '3 NEW LIKES', 'URGENT: REPLY NOW') choking the top ceiling of the panels and forcing the commuters' necks downward.", analysis: "Uses spatial crowding and jagged electronic borders to show how digital trivia physically crushes human posture and awareness." },
+                    { genre: "Workplace Comic", quote: "A boss's massive speech bubble filling 80% of the panel, wedging the employee and their tiny '...' bubble into the bottom-right corner.", analysis: "Visually enacts institutional bullying and silencing through the disproportionate scale of the dialogue containers." },
+                    { genre: "Memoir Strip", quote: "A character's smiling speech bubble saying 'I'm fine!' while a dark, scribbled cloud thought bubble above their head shows tangled knots.", analysis: "Juxtaposes external spoken dialogue against internal visual monologue to dramatize emotional masking." }
+                ],
+                level7Model: "Choking the upper half of Panels 1 through 4, overlapping jagged notification balloons physically press down upon the commuters' skulls, turning auditory digital noise into an oppressive architectural weight.",
+                pitfall: "Reading only the words inside the speech bubbles without analyzing the shape of the bubble border, its typography, and how much physical space it occupies in the frame.",
+                related: ["Emanata & Iconography", "Panel Size, Borders & Bleed", "Typography & Font Weight"]
             },
             {
                 term: "Color Palette & Saturation",
                 cat: "Visual & Graphic",
-                def: "The deliberate selection of hue, warmth/coolness, and color intensity across a visual text.",
+                def: "The deliberate selection of hue (warm vs. cool colors), saturation intensity, monochrome desaturation, and spot-color contrast across a visual text.",
                 ex: "A comic rendered entirely in sterile, desaturated blues except for a single vibrant yellow seedling.",
-                effect: "Establishes emotional mood immediately and uses chromatic contrast (spot color) to isolate symbols of hope, danger, or commercialization."
+                effect: "Establishes emotional mood immediately and uses chromatic contrast (spot color) to isolate symbols of hope, danger, or artificiality.",
+                mechanism: "Color operates on the human nervous system faster than language. Desaturated monochrome (greyscale, sepia, muted slate) evokes bleakness, industrial grime, historical distance, or depression. Cool synthetic hues (neon cyan, clinical blue) evoke digital alienation or sterility. Warm organic hues (amber, golden-hour yellow, lush emerald green) evoke vitality, sanctuary, and human intimacy. Look especially for 'spot color' (where one vibrant hue interrupts a monochrome palette) or a 'chromatic shift' across a text.",
+                genreExamples: [
+                    { genre: "Graphic Strip (Julian Cho)", quote: "Contrasting the cold, high-saturation cyan screen glow in Panels 1–4 (set against black-and-white ink) with the warm, organic amber lantern glow and green sprout in Panel 6.", analysis: "Executes a chromatic polarity shift from sterile digital quarantine (cyan) to restorative human warmth (amber/green)." },
+                    { genre: "WWF Deforestation Ad", quote: "Juxtaposing high-saturation emerald rainforest foliage against a desaturated, necrotic grey-brown scar of ash and yellow bulldozers.", analysis: "Uses chromatic contrast to equate ecological biodiversity with vibrant life and deforestation with pathological decay." },
+                    { genre: "Multimodal Infographic", quote: "Color-coding the short-haul flight metrics in warning coral-red ('118 kg CO2') and the electric rail metrics in soothing sage-green ('1.4 kg CO2').", analysis: "Uses intuitive traffic-light color psychology to steer the reader's moral evaluation of the data." }
+                ],
+                level7Model: "Through a deliberate chromatic polarity, Cho contrasts the sterile, high-saturation cyan glare of the smartphones in the opening grid against the warm, organic amber lantern light of the final splash panel.",
+                pitfall: "Writing simplistic equations like 'red means danger and green means nature.' Use sophisticated visual vocabulary ('chromatic juxtaposition', 'desaturated monochrome', 'spot-color salience', 'warm amber palette') and tie it to the mood.",
+                related: ["Chiaroscuro & Lighting", "Salience", "Shift / Volta (Tonal Pivot)"]
             }
         ];
 
         let currentGlossaryCat = 'all';
+        let currentModalIndex = 0;
 
         function renderGlossary() {
             const query = document.getElementById('glossary-search').value.toLowerCase().trim();
             const grid = document.getElementById('glossary-grid');
             const empty = document.getElementById('glossary-empty');
 
-            const filtered = glossaryData.filter(item => {
-                const matchesCat = currentGlossaryCat === 'all' || item.cat === currentGlossaryCat;
-                const matchesSearch = item.term.toLowerCase().includes(query) ||
-                                      item.def.toLowerCase().includes(query) ||
-                                      item.effect.toLowerCase().includes(query) ||
-                                      item.cat.toLowerCase().includes(query);
-                return matchesCat && matchesSearch;
-            });
+            const filtered = glossaryData
+                .map((item, originalIndex) => ({ ...item, originalIndex }))
+                .filter(item => {
+                    const matchesCat = currentGlossaryCat === 'all' || item.cat === currentGlossaryCat;
+                    const matchesSearch = item.term.toLowerCase().includes(query) ||
+                                          item.def.toLowerCase().includes(query) ||
+                                          item.effect.toLowerCase().includes(query) ||
+                                          item.cat.toLowerCase().includes(query) ||
+                                          item.mechanism.toLowerCase().includes(query);
+                    return matchesCat && matchesSearch;
+                });
 
             if (filtered.length === 0) {
                 grid.innerHTML = '';
@@ -1122,24 +1743,126 @@
             };
 
             grid.innerHTML = filtered.map(item => `
-                <div class="bg-white rounded-xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-md transition">
+                <div onclick="openDeviceModal(${item.originalIndex})" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDeviceModal(${item.originalIndex});}" role="button" aria-label="Inspect ${item.term} deep-dive examples" class="group cursor-pointer bg-white rounded-xl p-5 shadow-sm border border-slate-200 flex flex-col justify-between hover:shadow-xl hover:-translate-y-1 hover:border-ib-blue focus:outline-none focus:ring-2 focus:ring-ib-blue transition-all duration-200">
                     <div>
                         <div class="flex justify-between items-start gap-2 mb-2">
-                            <h4 class="font-bold text-ib-navy text-base">${item.term}</h4>
+                            <h4 class="font-bold text-ib-navy text-base group-hover:text-ib-blue transition flex items-center gap-1.5">
+                                <span>${item.term}</span>
+                            </h4>
                             <span class="text-[11px] font-bold px-2 py-0.5 rounded border whitespace-nowrap ${catColors[item.cat]}">${item.cat}</span>
                         </div>
                         <p class="text-xs text-slate-600 mb-3 leading-relaxed">${item.def}</p>
                         <div class="bg-slate-50 px-3 py-2 rounded border border-slate-100 text-xs italic text-slate-700 mb-3">
-                            <strong>Example:</strong> ${item.ex}
+                            <strong>Quick Example:</strong> ${item.ex}
                         </div>
                     </div>
-                    <div class="bg-ib-light/60 p-3 rounded-lg border-l-4 border-ib-blue text-xs text-ib-navy">
-                        <strong class="block text-[11px] uppercase tracking-wider text-ib-blue mb-0.5">How to Analyze / Paper 1 Effect:</strong>
-                        ${item.effect}
+                    <div>
+                        <div class="bg-ib-light/60 p-3 rounded-lg border-l-4 border-ib-blue text-xs text-ib-navy mb-3">
+                            <strong class="block text-[11px] uppercase tracking-wider text-ib-blue mb-0.5">How to Analyze / Paper 1 Effect:</strong>
+                            ${item.effect}
+                        </div>
+                        <div class="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] font-bold text-ib-blue group-hover:text-ib-gold transition">
+                            <span>Click for 3 Genre Examples & Level 7 Framing</span>
+                            <svg class="w-4 h-4 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </div>
                     </div>
                 </div>
             `).join('');
         }
+
+        function openDeviceModal(index) {
+            currentModalIndex = index;
+            const item = glossaryData[index];
+            const modal = document.getElementById('device-modal');
+
+            document.getElementById('modal-cat-badge').textContent = item.cat;
+            document.getElementById('modal-index-badge').textContent = `Device ${index + 1} of ${glossaryData.length}`;
+            document.getElementById('modal-term-title').textContent = item.term;
+            document.getElementById('modal-def').textContent = item.def;
+            document.getElementById('modal-short-effect').textContent = item.effect;
+            document.getElementById('modal-mechanism').textContent = item.mechanism;
+            document.getElementById('modal-level7-model').textContent = `"${item.level7Model}"`;
+            document.getElementById('modal-pitfall').textContent = item.pitfall;
+
+            // Reset Copy Button State
+            document.getElementById('copy-starter-text').textContent = 'Copy Framing';
+
+            // Populate Cross-Genre Examples
+            const examplesContainer = document.getElementById('modal-examples-list');
+            examplesContainer.innerHTML = item.genreExamples.map((exObj, i) => `
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 flex flex-col justify-between">
+                    <div>
+                        <span class="inline-block text-[10px] font-extrabold uppercase tracking-wider bg-ib-navy text-ib-accent px-2 py-0.5 rounded mb-2">
+                            Ex ${i + 1}: ${exObj.genre}
+                        </span>
+                        <p class="text-xs italic font-serif text-slate-800 bg-white p-2.5 rounded border border-slate-200 mb-2.5 leading-relaxed">
+                            ${exObj.quote}
+                        </p>
+                    </div>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        <strong class="text-emerald-800">Unpacked Effect:</strong> ${exObj.analysis}
+                    </p>
+                </div>
+            `).join('');
+
+            // Populate Synergistic Related Devices Tags
+            const relatedContainer = document.getElementById('modal-related-tags');
+            relatedContainer.innerHTML = item.related.map(relTerm => {
+                const targetIdx = glossaryData.findIndex(d => d.term === relTerm);
+                if (targetIdx !== -1) {
+                    return `<button type="button" onclick="openDeviceModal(${targetIdx})" class="text-xs font-bold bg-ib-light hover:bg-ib-blue hover:text-white text-ib-navy px-3 py-1.5 rounded-lg border border-slate-300 transition flex items-center gap-1">
+                        <span>${relTerm}</span>
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>`;
+                }
+                return '';
+            }).join('');
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDeviceModal() {
+            const modal = document.getElementById('device-modal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        function navigateModal(direction) {
+            let nextIndex = (currentModalIndex + direction + glossaryData.length) % glossaryData.length;
+            openDeviceModal(nextIndex);
+        }
+
+        function copyModalStarter() {
+            const textToCopy = glossaryData[currentModalIndex].level7Model;
+            const tempInput = document.createElement('textarea');
+            tempInput.value = textToCopy;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            const btnText = document.getElementById('copy-starter-text');
+            btnText.textContent = 'Copied to Clipboard!';
+            setTimeout(() => {
+                btnText.textContent = 'Copy Framing';
+            }, 2000);
+        }
+
+        // Keyboard navigation for Modal (Escape, Left Arrow, Right Arrow)
+        window.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('device-modal');
+            if (modal.classList.contains('hidden')) return;
+            if (e.key === 'Escape') {
+                closeDeviceModal();
+            } else if (e.key === 'ArrowRight') {
+                navigateModal(1);
+            } else if (e.key === 'ArrowLeft') {
+                navigateModal(-1);
+            }
+        });
 
         function setGlossaryCat(cat) {
             currentGlossaryCat = cat;
